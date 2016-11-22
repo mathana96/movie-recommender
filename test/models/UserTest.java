@@ -12,6 +12,7 @@ public class UserTest
 	@Before
 	public void setUp() throws Exception
 	{
+		
 	}
 
 	@After
@@ -20,9 +21,20 @@ public class UserTest
 	}
 
 	@Test
-	public void test()
+	public void testCreateUser()
 	{
-		fail("Not yet implemented");
+		User user = new User("Bob", "Larkin", 63, 'M', "Carpenter");
+		assertEquals("Bob", user.firstName);
+		assertEquals("Larkin", user.lastName);
+		assertEquals(63, user.age);
+		assertEquals('M', user.gender);
+		assertEquals("Carpenter", user.occupation);	
+	}
+	
+	@Test
+	public void testRemoveUser()
+	{
+		fail("Not implemented");
 	}
 
 }
