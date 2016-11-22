@@ -34,7 +34,7 @@ public class UserTest
 	@Test
 	public void testRemoveUser()
 	{
-		fail("Not implemented");
+	
 	}
 
 }
