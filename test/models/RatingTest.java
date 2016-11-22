@@ -20,9 +20,13 @@ public class RatingTest
 	}
 
 	@Test
-	public void test()
+	public void testCreateRating()
 	{
-		fail("Not yet implemented");
+		//Amend when able to give id to users and movie
+		Rating rating = new Rating(1, 10, 5);
+		assertEquals(1, rating.userId);
+		assertEquals(10, rating.movieId);
+		assertEquals(5, rating.rating);
 	}
 
 }
