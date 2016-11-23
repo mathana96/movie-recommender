@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import models.Movie;
 import models.User;
 
 public class ParserTest
@@ -42,5 +43,10 @@ public class ParserTest
 	public void testParseMovieData() throws Exception
 	{
 		assertEquals(10, parser.getMovies().size());
+		
+		Movie movie =  parser.getMovie(1);
+		assertEquals("Toy Story (1995)", movie.title);
+		assertEquals(1995, movie.year);
+		assertEquals("http://us.imdb.com/M/title-exact?Toy%20Story%20(1995)", movie.url);	
 	}
 }

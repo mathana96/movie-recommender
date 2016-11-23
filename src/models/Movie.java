@@ -9,9 +9,9 @@ public class Movie
 	
 	//HashSet of userId and ratings
 	
-	public Movie(String title, int year, String url)
+	public Movie(long id, String title, int year, String url)
 	{
-		//this.id = ++counter;
+		this.id = id;
 		this.title = title;
 		this.year = year;
 		this.url = url;

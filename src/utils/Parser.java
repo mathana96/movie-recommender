@@ -6,17 +6,21 @@ import java.util.Map;
 
 import edu.princeton.cs.introcs.In;
 import models.Movie;
+import models.Rating;
 import models.User;
 
 public class Parser
 {
 	Map<Long, User> users = new HashMap<>();
 	Map<Long, Movie> movies = new HashMap<>();
+	Map<Long, Rating> ratingsByUser = new HashMap<>(); //Key is userId
+	Map<Long, Rating> ratingsByMovie = new HashMap<>(); //Key is movieId
 	
 	public Parser() throws Exception
 	{
 		parseUserData("././data/moviedata_small/users5.dat");
 		parseMovieData("././data/moviedata_small/items5.dat");
+		parseRatingData("././data/moviedata_small/ratings5.dat");
 	}
 
 	public void parseUserData(String path) throws Exception
@@ -32,7 +36,7 @@ public class Parser
 			
 		  if (userTokens.length == 7) 
 		  {
-		  	Long userId = Long.parseLong(userTokens[0]);
+		  	long userId = Long.parseLong(userTokens[0]);
 		  	String firstName = userTokens[1];
 		  	String lastName = userTokens[2];
 		  	int age = Integer.parseInt(userTokens[3]);
@@ -45,7 +49,7 @@ public class Parser
 		  }
 		  else
 		  {
-		  	throw new Exception("Invalid member length: "+userTokens.length);
+		  	throw new Exception("Invalid member length: "+ userTokens.length);
 		  }
 		}
 	}
@@ -63,22 +67,49 @@ public class Parser
 			
 		  if (movieTokens.length == 23) 
 		  {
-		  	Long movieId = Long.parseLong(movieTokens[0]);
+		  	long movieId = Long.parseLong(movieTokens[0]);
 		  	String title = movieTokens[1];
-		  	int year = Integer.parseInt(movieTokens[2].substring(movieTokens[2].length()-5, movieTokens[2].length()-2));
+		  	int year = Integer.parseInt(movieTokens[2].substring(movieTokens[2].length()-4, movieTokens[2].length()));
 		  	String url = movieTokens[3];
 		  	
-        Movie movie = new Movie(title, year, url);
+        Movie movie = new Movie(movieId, title, year, url);
         movies.put(movieId, movie);
 
 		  }
 		  else
 		  {
-		  	throw new Exception("Invalid member length: "+movieTokens.length);
+		  	throw new Exception("Invalid member length: "+ movieTokens.length);
 		  }
 		}
 	}
 	
+	public void parseRatingData(String path) throws Exception
+	{
+		File ratingsFile = new File(path);
+		In inRatings = new In(ratingsFile);
+		String delims = "[|]";
+		
+		while (!inRatings.isEmpty())
+		{
+			String ratingDetails = inRatings.readLine();
+			String[] ratingTokens = ratingDetails.split(delims);
+			
+		  if (ratingTokens.length == 4) 
+		  {
+		  	long userId = Long.parseLong(ratingTokens[0]);
+		  	long movieId = Long.parseLong(ratingTokens[1]);
+		  	int rating = Integer.parseInt(ratingTokens[2]);
+		  	
+        Rating r = new Rating(userId, movieId, rating);
+        ratingsByUser.put(userId, r);
+        ratingsByMovie.put(movieId, r);
+		  }
+		  else
+		  {
+		  	throw new Exception("Invalid member length: "+ ratingTokens.length);
+		  }
+		}
+	}
 	public Map<Long, User> getUsers()
 	{
 		return users;
@@ -92,6 +123,11 @@ public class Parser
 	public Map<Long, Movie> getMovies()
 	{
 		return movies;
+	}
+	
+	public Movie getMovie(long i)
+	{
+		return movies.get(i);
 	}
 
 }

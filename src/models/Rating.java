@@ -2,9 +2,10 @@ package models;
 
 public class Rating
 {
-	public int userId, movieId, rating;
+	public long userId, movieId;
+	public int rating;
 	
-	public Rating(int userId, int movieId, int rating)
+	public Rating(long userId, long movieId, int rating)
 	{
 		this.userId = userId;
 		this.movieId = movieId;

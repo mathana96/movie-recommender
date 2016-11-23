@@ -22,7 +22,8 @@ public class MovieTest
 	@Test
 	public void testCreateMovie()
 	{
-		Movie movie = new Movie("Jolly Jolly WITmas", 1996, "http://bit.ly/test");
+		Movie movie = new Movie(23, "Jolly Jolly WITmas", 1996, "http://bit.ly/test");
+		assertEquals(23,  movie.id);
 		assertEquals("Jolly Jolly WITmas", movie.title);
 		assertEquals(1996, movie.year);
 		assertEquals("http://bit.ly/test", movie.url);
