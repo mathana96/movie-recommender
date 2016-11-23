@@ -22,11 +22,11 @@ public class RatingTest
 	@Test
 	public void testCreateRating()
 	{
-		//Amend when able to give id to users and movie
-		Rating rating = new Rating(1, 10, 5);
+		Rating rating = new Rating(1, 10, 5, 234324234);
 		assertEquals(1, rating.userId);
 		assertEquals(10, rating.movieId);
 		assertEquals(5, rating.rating);
+		assertEquals(234324234, rating.timestamp);
 	}
 
 }

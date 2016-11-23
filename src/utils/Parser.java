@@ -1,7 +1,11 @@
 package utils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.princeton.cs.introcs.In;
@@ -13,8 +17,8 @@ public class Parser
 {
 	Map<Long, User> users = new HashMap<>();
 	Map<Long, Movie> movies = new HashMap<>();
-	Map<Long, Rating> ratingsByUser = new HashMap<>(); //Key is userId
-	Map<Long, Rating> ratingsByMovie = new HashMap<>(); //Key is movieId
+	List<Rating> unsortedRatings = new ArrayList<>();
+	RatingByTimeComparator comparator = new RatingByTimeComparator();
 	
 	public Parser() throws Exception
 	{
@@ -99,15 +103,26 @@ public class Parser
 		  	long userId = Long.parseLong(ratingTokens[0]);
 		  	long movieId = Long.parseLong(ratingTokens[1]);
 		  	int rating = Integer.parseInt(ratingTokens[2]);
-		  	
-        Rating r = new Rating(userId, movieId, rating);
-        ratingsByUser.put(userId, r);
-        ratingsByMovie.put(movieId, r);
-		  }
+		  	long timestamp = Long.parseLong(ratingTokens[3]);
+        Rating r = new Rating(userId, movieId, rating, timestamp);
+        unsortedRatings.add(r);
+         
+      }
 		  else
 		  {
 		  	throw new Exception("Invalid member length: "+ ratingTokens.length);
 		  }
+		}
+		Collections.sort(unsortedRatings, comparator);
+		
+		for (int i=0; i<unsortedRatings.size(); i++)
+		{
+			Rating rating = unsortedRatings.get(i);
+      User user = getUser(rating.userId);
+      Movie movie = getMovie(rating.movieId);
+      
+      user.ratedMovies.put(rating.movieId, rating.rating);
+      movie.userRatings.put(rating.userId, rating.rating);		
 		}
 	}
 	public Map<Long, User> getUsers()

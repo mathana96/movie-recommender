@@ -1,18 +1,21 @@
 package models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class User
 {
 	public String firstName, lastName, occupation, username, password;
 	public int age;
-	public long userId;
+	public long id;
 	public char gender;
-	//public static long counter = 0L; ID given based on userIndex size
 	
-	//HashSet of movieId and rating
+	//Map of movie's and their rating. Using movie`id
+	public Map<Long, Integer> ratedMovies = new HashMap<>();
 	
 	public User(Long id, String firstName, String lastName, int age, char gender, String occupation)
 	{
-		this.userId = id;
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;

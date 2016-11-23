@@ -1,13 +1,15 @@
 package models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Movie
 {
 	public String title, url;
 	public int year;
 	public long id;
-	//static long counter = 0L; Based on all movies from DB
 	
-	//HashSet of userId and ratings
+	public Map<Long, Integer> userRatings = new HashMap<>();
 	
 	public Movie(long id, String title, int year, String url)
 	{

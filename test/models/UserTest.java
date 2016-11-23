@@ -26,7 +26,7 @@ public class UserTest
 	public void testCreateUser() throws Exception
 	{
 		User user = new User(22L, "Bob", "Larkin", 63, 'M', "carpenter");
-		assertEquals(22, user.userId);
+		assertEquals(22, user.id);
 		assertEquals("Bob", user.firstName);
 		assertEquals("Larkin", user.lastName);
 		assertEquals(63, user.age);

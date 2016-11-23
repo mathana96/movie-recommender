@@ -49,4 +49,26 @@ public class ParserTest
 		assertEquals(1995, movie.year);
 		assertEquals("http://us.imdb.com/M/title-exact?Toy%20Story%20(1995)", movie.url);	
 	}
+	
+	@Test
+	public void testRatingData()
+	{
+		//7
+		User user = parser.getUser(1);
+		//Map overwrites later values if same key found. Sort ratings by time stamp
+		assertEquals(7, user.ratedMovies.size());
+	
+		Movie movie = parser.getMovie(7);
+		assertEquals(movie.id, 7);
+		assertEquals(movie.title, "Twelve Monkeys (1995)");
+		assertEquals(movie.year, 1995);
+		assertEquals(movie.url, "http://us.imdb.com/M/title-exact?Twelve%20Monkeys%20(1995)");
+		
+		//System.out.println(user.ratedMovies.toString());
+		int userRating = user.ratedMovies.get(movie.id);
+		int movieRating = movie.userRatings.get(user.id);
+		assertEquals(userRating, movieRating);
+		
+
+	}
 }
