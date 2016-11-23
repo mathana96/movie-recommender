@@ -4,15 +4,15 @@ public class User
 {
 	public String firstName, lastName, occupation, username, password;
 	public int age;
-	public long id;
+	public long userId;
 	public char gender;
 	//public static long counter = 0L; ID given based on userIndex size
 	
 	//HashSet of movieId and rating
 	
-	public User(String firstName, String lastName, int age, char gender, String occupation)
+	public User(Long id, String firstName, String lastName, int age, char gender, String occupation)
 	{
-		//this.id = ++counter;
+		this.userId = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;

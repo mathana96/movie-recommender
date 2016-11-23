@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import utils.Parser;
+
 public class UserTest
 {
 
@@ -21,18 +23,19 @@ public class UserTest
 	}
 
 	@Test
-	public void testCreateUser()
+	public void testCreateUser() throws Exception
 	{
-		User user = new User("Bob", "Larkin", 63, 'M', "Carpenter");
+		User user = new User(22L, "Bob", "Larkin", 63, 'M', "carpenter");
+		assertEquals(22, user.userId);
 		assertEquals("Bob", user.firstName);
 		assertEquals("Larkin", user.lastName);
 		assertEquals(63, user.age);
 		assertEquals('M', user.gender);
-		assertEquals("Carpenter", user.occupation);	
+		assertEquals("carpenter", user.occupation);	
 	}
 	
 	@Test
-	public void testRemoveUser()
+	public void testUserCreatedFromParser()
 	{
 	
 	}
