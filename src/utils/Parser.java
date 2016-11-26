@@ -2,7 +2,6 @@ package utils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -113,6 +112,7 @@ public class Parser
 		  	throw new Exception("Invalid member length: "+ ratingTokens.length);
 		  }
 		}
+		//Sort Rating objects based on the rating values
 		Collections.sort(unsortedRatings, comparator);
 		
 		for (int i=0; i<unsortedRatings.size(); i++)
@@ -121,8 +121,8 @@ public class Parser
       User user = getUser(rating.userId);
       Movie movie = getMovie(rating.movieId);
       
-      user.ratedMovies.put(rating.movieId, rating.rating);
-      movie.userRatings.put(rating.userId, rating.rating);		
+      user.addRatedMovies(movie.movieId, rating.rating);
+      movie.addUserRatings(user.userId, rating.rating);
 		}
 	}
 	public Map<Long, User> getUsers()
