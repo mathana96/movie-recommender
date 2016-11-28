@@ -15,6 +15,7 @@ public class RecommenderAPI
   private Serializer serializer;
   
 	Map<Long, User> users = new HashMap<>();
+	//Map<String, User> usersByUsername = new HashMap<>();
 	Map<Long, Movie> movies = new HashMap<>();
 	Parser parser;
 	
@@ -51,7 +52,25 @@ public class RecommenderAPI
 		users.put(user.userId, user);
 		return user;
 	}
-
+	
+	public Map<Long, User> getUsers()
+	{
+		return users;
+	}
+	
+	public User getUserById(Long id)
+	{
+		return users.get(id);
+	}
+	
+//	public User getUserByUsername(String username)
+//	{
+//		return 
+//	}
+	public Long getUsersSize()
+	{
+		return (long) users.size();
+	}
 //	public void removeUser(userId)
 //	{
 //		

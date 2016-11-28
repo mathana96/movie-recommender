@@ -15,7 +15,7 @@ public class ParserTest
 {
 
 	Parser parser;
-	File  datastore = new File("datastoreTest.xml");
+	File  datastore = new File("datastoreParserTest.xml");
 	Serializer serializer = new XMLSerializer(datastore);
 	
 	@Before
