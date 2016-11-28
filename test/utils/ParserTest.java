@@ -2,6 +2,8 @@ package utils;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,11 +15,13 @@ public class ParserTest
 {
 
 	Parser parser;
+	File  datastore = new File("datastoreTest.xml");
+	Serializer serializer = new XMLSerializer(datastore);
 	
 	@Before
 	public void setUp() throws Exception 
 	{
-		parser = new Parser();
+		parser = new Parser(serializer);
 	}
 
 	@After
