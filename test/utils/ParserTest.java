@@ -3,25 +3,30 @@ package utils;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import models.Movie;
+import models.Rating;
 import models.User;
+import static models.Fixtures.*;
 
 public class ParserTest
 {
 
 	Parser parser;
-	File  datastore = new File("datastoreParserTest.xml");
-	Serializer serializer = new XMLSerializer(datastore);
+	String userDataPath = ("././data/moviedata_small/users5.dat");
+	String movieDataPath = ("././data/moviedata_small/items5.dat");
+	String ratingDataPath = ("././data/moviedata_small/ratings5.dat");
 	
 	@Before
-	public void setUp() throws Exception 
+	public void setUp()
 	{
-		parser = new Parser(serializer);
+		parser = new Parser();
 	}
 
 	@After
@@ -33,44 +38,48 @@ public class ParserTest
 	@Test
 	public void testParseUserData() throws Exception
 	{
-		assertEquals(5, parser.getUsers().size());
+		Map<Long, User> users = parser.parseUserData(userDataPath);
 		
-		User user =  parser.getUser(1);
-		assertEquals("Leonard", user.firstName);
-		assertEquals("Hernandez", user.lastName);
-		assertEquals(24, user.age);
-		assertEquals('M', user.gender);
-		assertEquals("technician", user.occupation);	
+		assertEquals(usersFixtures.length, users.size());
+		
+		User user = usersFixtures[0];
+		assertEquals(user.firstName, users.get(user.userId).firstName);
+		assertEquals(usersFixtures[1], users.get(2L)); //They content the same stuff
+		assertNotSame(usersFixtures[1], users.get(2L)); //But do not point at the same reference in memory
 	}
 	
 	@Test
 	public void testParseMovieData() throws Exception
 	{
-		assertEquals(10, parser.getMovies().size());
+		Map<Long, Movie> movies = parser.parseMovieData(movieDataPath);
 		
-		Movie movie =  parser.getMovie(1);
-		assertEquals("Toy Story (1995)", movie.title);
-		assertEquals(1995, movie.year);
-		assertEquals("http://us.imdb.com/M/title-exact?Toy%20Story%20(1995)", movie.url);	
+		assertEquals(moviesFixtures.length, movies.size());
+		
+		Movie movie = moviesFixtures[0];
+		assertEquals(movie.title, movies.get(movie.movieId).title);
+		assertEquals(moviesFixtures[1], movies.get(2L));
+		assertNotSame(moviesFixtures[1], movies.get(2L));
 	}
 	
 	@Test
-	public void testRatingData()
+	public void testRatingData() throws Exception
 	{
-		//7
-		User user = parser.getUser(1);
-		//Map overwrites later values if same key found. Sort ratings by time stamp
-		assertEquals(7, user.ratedMovies.size());
-	
-		Movie movie = parser.getMovie(7);
-		assertEquals(movie.movieId, 7);
-		assertEquals(movie.title, "Twelve Monkeys (1995)");
-		assertEquals(movie.year, 1995);
-		assertEquals(movie.url, "http://us.imdb.com/M/title-exact?Twelve%20Monkeys%20(1995)");
+		//Have to load Users and Movies because Ratings are added to users and movies
+		parser.parseMovieData(movieDataPath);
+		parser.parseUserData(userDataPath);
+		List<Rating> ratings = parser.parseRatingData(ratingDataPath);
 		
-		//System.out.println(user.ratedMovies.toString());
+		assertEquals(ratingsFixtures.length, ratings.size());
+		
+		Rating rating = ratingsFixtures[0];
+		assertEquals(rating.rating, ratings.get(0).rating);
+		
+		Movie movie = parser.getMovie(rating.movieId);
+		User user = parser.getUser(rating.userId);
+		
 		int userRating = user.ratedMovies.get(movie.movieId);
 		int movieRating = movie.userRatings.get(user.userId);
+		
 		assertEquals(userRating, movieRating);
 	}
 }

@@ -16,24 +16,17 @@ public class Parser
 {
 	Map<Long, User> users = new HashMap<>();
 	Map<Long, Movie> movies = new HashMap<>();
-	
-	List<Rating> unsortedRatings = new ArrayList<>();
+	List<Rating> ratings = new ArrayList<>();
 	
 	RatingByTimeComparator comparator = new RatingByTimeComparator();
-	
-//  File  datastore = new File("datastore.xml");
-//  Serializer serializer = new XMLSerializer(datastore);
 
 
-	public Parser(Serializer serializer) throws Exception
+	public Parser()
 	{
-		parseUserData("././data/moviedata_small/users5.dat");
-		parseMovieData("././data/moviedata_small/items5.dat");
-		parseRatingData("././data/moviedata_small/ratings5.dat");
-		store(serializer);
+
 	}
 
-	public void parseUserData(String path) throws Exception
+	public Map<Long, User> parseUserData(String path) throws Exception
 	{
 		File usersFile = new File(path);
 		In inUsers = new In(usersFile);
@@ -62,9 +55,10 @@ public class Parser
 				throw new Exception("Invalid member length: "+ userTokens.length);
 			}
 		}
+		return users;
 	}
 
-	public void parseMovieData(String path) throws Exception 
+	public Map<Long, Movie> parseMovieData(String path) throws Exception 
 	{
 		File moviesFile = new File(path);
 		In inMovies = new In(moviesFile);
@@ -91,9 +85,10 @@ public class Parser
 				throw new Exception("Invalid member length: "+ movieTokens.length);
 			}
 		}
+		return movies;
 	}
 
-	public void parseRatingData(String path) throws Exception
+	public List<Rating> parseRatingData(String path) throws Exception
 	{
 		File ratingsFile = new File(path);
 		In inRatings = new In(ratingsFile);
@@ -111,7 +106,7 @@ public class Parser
 				int rating = Integer.parseInt(ratingTokens[2]);
 				long timestamp = Long.parseLong(ratingTokens[3]);
 				Rating r = new Rating(userId, movieId, rating, timestamp);
-				unsortedRatings.add(r);
+				ratings.add(r);
 
 			}
 			else
@@ -120,17 +115,20 @@ public class Parser
 			}
 		}
 		//Sort Rating objects based on the rating values
-		Collections.sort(unsortedRatings, comparator);
+		Collections.sort(ratings, comparator);
 
-		for (int i=0; i<unsortedRatings.size(); i++)
+		//Adds respective ratings to users and movies
+		for (int i=0; i<ratings.size(); i++)
 		{
-			Rating rating = unsortedRatings.get(i);
+			Rating rating = ratings.get(i);
 			User user = getUser(rating.userId);
 			Movie movie = getMovie(rating.movieId);
 
 			user.addRatedMovies(movie.movieId, rating.rating);
 			movie.addUserRatings(user.userId, rating.rating);
 		}
+		
+		return ratings;
 	}
 	
   public void store(Serializer serializer) throws Exception
@@ -140,21 +138,21 @@ public class Parser
     serializer.write(); 
   }
   
-	public Map<Long, User> getUsers()
-	{
-		return users;
-	}
-
+//	public Map<Long, User> getUsers()
+//	{
+//		return users;
+//	}
+//
 	public User getUser(long l)
 	{
 		return users.get(l);
 	}
 
-	public Map<Long, Movie> getMovies()
-	{
-		return movies;
-	}
-
+//	public Map<Long, Movie> getMovies()
+//	{
+//		return movies;
+//	}
+//
 	public Movie getMovie(long i)
 	{
 		return movies.get(i);

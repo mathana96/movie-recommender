@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,31 +16,47 @@ public class RecommenderAPI
   private Serializer serializer;
   
 	Map<Long, User> users = new HashMap<>();
-	//Map<String, User> usersByUsername = new HashMap<>();
 	Map<Long, Movie> movies = new HashMap<>();
+	List<Rating> ratings = new ArrayList<>();
 	Parser parser;
 	
 	public RecommenderAPI()
 	{}
 	
+	
+	
 	public RecommenderAPI(Serializer serializer) throws Exception
 	{
 		this.serializer = serializer;
-		parser = new Parser(serializer); //Instantiates Parser which reads in raw movie data. 
 	}
 
+	
+	public void loadRawData() throws Exception
+	{
+		String userDataPath = ("././data/moviedata_small/users5.dat");
+		String movieDataPath = ("././data/moviedata_small/items5.dat");
+		String ratingDataPath = ("././data/moviedata_small/ratings5.dat");
+		
+		users = parser.parseUserData(userDataPath);
+		movies = parser.parseMovieData(movieDataPath);
+		ratings = parser.parseRatingData(ratingDataPath);
+		store();
+	}
+	
   @SuppressWarnings("unchecked")
   public void load() throws Exception
   {
     serializer.read();
+    ratings = (List<Rating>) serializer.pop();
     movies = (Map<Long, Movie>) serializer.pop();
     users = (Map<Long, User>) serializer.pop();
   }
   
-  void store() throws Exception
+  public void store() throws Exception
   {
     serializer.push(users);
     serializer.push(movies);
+    serializer.push(ratings);
     serializer.write(); 
   }
   
