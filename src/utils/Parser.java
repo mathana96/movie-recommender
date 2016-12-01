@@ -45,8 +45,9 @@ public class Parser
 				int age = Integer.parseInt(userTokens[3]);
 				char gender = userTokens[4].charAt(0);
 				String occupation = userTokens[5];
-
-				User user = new User(userId, firstName, lastName, age, gender, occupation);
+				String username = "";
+				String password = "";
+				User user = new User(userId, firstName, lastName, age, gender, occupation, username, password);
 				users.put(userId, user);
 
 			}

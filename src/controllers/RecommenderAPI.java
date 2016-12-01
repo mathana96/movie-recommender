@@ -63,9 +63,9 @@ public class RecommenderAPI
 	public User addUser(String firstName, String lastName, int age, char gender, String occupation, String username, String password)
 	{
 		long userId = users.size() + 1;
-		User user = new User(userId, firstName, lastName, age, gender, occupation);
-		user.username = username;
-		user.password = password;
+		User user = new User(userId, firstName, lastName, age, gender, occupation, username, password);
+		//user.username = username;
+		//user.password = password;
 		users.put(user.userId, user);
 		return user;
 	}

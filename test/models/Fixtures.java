@@ -4,11 +4,11 @@ public class Fixtures
 {
   public static User[] usersFixtures =
   {
-    new User (1L, "Leonard", "Hernandez", 24, 'M', "technician"),
-    new User (2L, "Melody", "Roberson", 53, 'F', "other"),
-    new User (3L, "Gregory", "Newton", 23, 'M', "writer"),
-    new User (4L, "Oliver", "George", 24, 'M', "technician"),
-    new User (5L, "Jenna", "Parker", 33, 'F', "other")
+    new User (1L, "Leonard", "Hernandez", 24, 'M', "technician", "", ""),
+    new User (2L, "Melody", "Roberson", 53, 'F', "other", "", ""),
+    new User (3L, "Gregory", "Newton", 23, 'M', "writer", "", ""),
+    new User (4L, "Oliver", "George", 24, 'M', "technician", "", ""),
+    new User (5L, "Jenna", "Parker", 33, 'F', "other", "", "")
   };
 
   public static Movie[] moviesFixtures =
