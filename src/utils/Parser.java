@@ -4,8 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.princeton.cs.introcs.In;
 import models.Movie;
@@ -17,6 +19,8 @@ public class Parser
 	Map<Long, User> users = new HashMap<>();
 	Map<Long, Movie> movies = new HashMap<>();
 	List<Rating> ratings = new ArrayList<>();
+	Map<String, Rating> ratingsMap = new HashMap<>();
+
 	
 	RatingByTimeComparator comparator = new RatingByTimeComparator();
 
@@ -104,32 +108,49 @@ public class Parser
 			{
 				long userId = Long.parseLong(ratingTokens[0]);
 				long movieId = Long.parseLong(ratingTokens[1]);
-				int rating = Integer.parseInt(ratingTokens[2]);
+				Integer rating = Integer.parseInt(ratingTokens[2]);
 				long timestamp = Long.parseLong(ratingTokens[3]);
 				Rating r = new Rating(userId, movieId, rating, timestamp);
+				
 				ratings.add(r);
-
+			
 			}
 			else
 			{
 				throw new Exception("Invalid member length: "+ ratingTokens.length);
 			}
 		}
-		//Sort Rating objects based on the rating values
+		//Sort Rating objects based on the timestamp to get most recent rating on duplicates	
 		Collections.sort(ratings, comparator);
 
-		//Adds respective ratings to users and movies
-		for (int i=0; i<ratings.size(); i++)
+		//Using a Map to filter out duplicates
+		for (Rating r: ratings)
 		{
-			Rating rating = ratings.get(i);
+			
+			ratingsMap.put(r.userId + "u" + r.movieId + "m", r);
+		}
+		
+		//Placing duplicates into an ArrayList to sort as Map does not guarantee order
+		List<Rating> ratingsFiltered = new ArrayList<>(ratingsMap.values());
+		Collections.sort(ratingsFiltered, comparator);
+		
+//		System.out.println(ratingsFiltered.size());
+//		System.out.println(ratingsFiltered);
+		
+		
+		//Adds respective ratings to users and movies
+		for (int i=0; i<ratingsFiltered.size(); i++)
+		{
+			Rating rating = ratingsFiltered.get(i);
 			User user = getUser(rating.userId);
 			Movie movie = getMovie(rating.movieId);
 
 			user.addRatedMovies(movie.movieId, rating.rating);
 			movie.addUserRatings(user.userId, rating.rating);
+//			System.out.println(user.firstName + " " + user.ratedMovies);
 		}
-		
-		return ratings;
+	
+		return ratingsFiltered;
 	}
 	
   public void store(Serializer serializer) throws Exception

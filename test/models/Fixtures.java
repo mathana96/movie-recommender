@@ -27,56 +27,89 @@ public class Fixtures
  
   public static Rating[]ratingsFixtures =
   {
-    new Rating(5, 10, -5, 875636493), 
-    new Rating(3, 2, -5, 889237224), 
-    new Rating(2, 4, -5, 888980085), 
-    new Rating(5, 4, -5, 875721432), 
-    new Rating(5, 4, -5, 875635807), 
-    new Rating(3, 5, -5, 889237269), 
-    new Rating(3, 5, -5, 889237247), 
-    new Rating(3, 7, -5, 889236983), 
-    new Rating(5, 9, -5, 878844423), 
-    new Rating(3, 3, -3, 889237269), 
-    new Rating(3, 4, -3, 889237224), 
-    new Rating(1, 5, -3, 878542201), 
-    new Rating(5, 5, -3, 875635723), 
-    new Rating(2, 10, 1, 888551441), 
-    new Rating(2, 10, 1, 888551441), 
-    new Rating(2, 1, 1, 888980240), 
-    new Rating(2, 2, 1, 888550631), 
-    new Rating(5, 2, 1, 875636053), 
-    new Rating(3, 3, 1, 889237122), 
-    new Rating(5, 3, 1, 875635225), 
-    new Rating(3, 4, 1, 889237122), 
-    new Rating(4, 4, 1, 892004275), 
-    new Rating(4, 6, 1, 892003459), 
-    new Rating(1, 7, 1, 874965739), 
-    new Rating(5, 8, 1, 875720691), 
-    new Rating(1, 9, 1, 888732928), 
-    new Rating(4, 10, 3, 892004275), 
-    new Rating(1, 1, 3, 878542420), 
-    new Rating(3, 1, 3, 889237455), 
-    new Rating(5, 1, 3, 875635748), 
-    new Rating(2, 2, 3, 888550774), 
-    new Rating(1, 3, 3, 878542699), 
-    new Rating(2, 3, 3, 888551922), 
-    new Rating(1, 5, 3, 878542441), 
-    new Rating(2, 7, 3, 888550871), 
-    new Rating(4, 7, 3, 892003525), 
-    new Rating(5, 7, 3, 875636198), 
-    new Rating(4, 8, 3, 892001445), 
-    new Rating(1, 10, 3, 875072547), 
-    new Rating(1, 10, 3, 887431883), 
-    new Rating(4, 10, 5, 892003526), 
-    new Rating(1, 1, 5, 889751711), 
-    new Rating(2, 1, 5, 888552084), 
-    new Rating(4, 1, 5, 892002353), 
-    new Rating(1, 2, 5, 875072442), 
-    new Rating(4, 3, 5, 892002352), 
-    new Rating(4, 4, 5, 892004409), 
-    new Rating(4, 4, 5, 892002353), 
-    new Rating(3, 8, 5, 889237455), 
-    new Rating(2, 10, 5, 888552084)
-
+  	new Rating(1, 7, 1, 874965739), 
+  	new Rating(1, 2, 5, 875072442), 
+  	new Rating(5, 3, 1, 875635225), 
+  	new Rating(5, 5, -3, 875635723), 
+  	new Rating(5, 1, 3, 875635748), 
+  	new Rating(5, 2, 1, 875636053), 
+  	new Rating(5, 7, 3, 875636198), 
+  	new Rating(5, 10, -5, 875636493), 
+  	new Rating(5, 8, 1, 875720691), 
+  	new Rating(5, 4, -5, 875721432), 
+  	new Rating(1, 5, 3, 878542441), 
+  	new Rating(1, 3, 3, 878542699), 
+  	new Rating(5, 9, -5, 878844423), 
+  	new Rating(1, 10, 3, 887431883), 
+  	new Rating(2, 2, 3, 888550774), 
+  	new Rating(2, 7, 3, 888550871), 
+  	new Rating(2, 3, 3, 888551922), 
+  	new Rating(2, 10, 5, 888552084), 
+  	new Rating(1, 9, 1, 888732928), 
+  	new Rating(2, 4, -5, 888980085), 
+  	new Rating(2, 1, 1, 888980240), 
+  	new Rating(3, 7, -5, 889236983), 
+  	new Rating(3, 4, -3, 889237224), 
+  	new Rating(3, 2, -5, 889237224), 
+  	new Rating(3, 5, -5, 889237269), 
+  	new Rating(3, 3, -3, 889237269), 
+  	new Rating(3, 8, 5, 889237455), 
+  	new Rating(3, 1, 3, 889237455), 
+  	new Rating(1, 1, 5, 889751711), 
+  	new Rating(4, 8, 3, 892001445), 
+  	new Rating(4, 3, 5, 892002352), 
+  	new Rating(4, 1, 5, 892002353), 
+  	new Rating(4, 6, 1, 892003459), 
+  	new Rating(4, 7, 3, 892003525), 
+  	new Rating(4, 10, 3, 892004275), 
+  	new Rating(4, 4, 5, 892004409)
+	
   };
+  
+  
+  public void ratedMoviesFixtures()
+  {
+  	
+  	usersFixtures[0].ratedMovies.put(1L, 5);
+  	usersFixtures[0].ratedMovies.put(2L, 5);
+  	usersFixtures[0].ratedMovies.put(3L, 3);
+  	usersFixtures[0].ratedMovies.put(5L, 3);
+  	usersFixtures[0].ratedMovies.put(7L, 1);
+  	usersFixtures[0].ratedMovies.put(9L, 1);
+  	usersFixtures[0].ratedMovies.put(10L, 3);
+  	
+  	usersFixtures[1].ratedMovies.put(1L, 1);
+  	usersFixtures[1].ratedMovies.put(2L, 3);
+  	usersFixtures[1].ratedMovies.put(3L, 3);
+  	usersFixtures[1].ratedMovies.put(4L, -5);
+  	usersFixtures[1].ratedMovies.put(7L, 3);
+  	usersFixtures[1].ratedMovies.put(10L, 5);
+  	
+  	usersFixtures[2].ratedMovies.put(1L, 3);
+  	usersFixtures[2].ratedMovies.put(2L, -5);
+  	usersFixtures[2].ratedMovies.put(3L, -3);
+  	usersFixtures[2].ratedMovies.put(4L, -3);
+  	usersFixtures[2].ratedMovies.put(5L, -5);
+  	usersFixtures[2].ratedMovies.put(7L, -5);
+  	usersFixtures[2].ratedMovies.put(8L, 5);
+  	
+  	usersFixtures[3].ratedMovies.put(1L, 5);
+  	usersFixtures[3].ratedMovies.put(3L, 5);
+  	usersFixtures[3].ratedMovies.put(4L, 5);
+  	usersFixtures[3].ratedMovies.put(6L, 1);
+  	usersFixtures[3].ratedMovies.put(7L, 3);
+  	usersFixtures[3].ratedMovies.put(8L, 3);
+  	usersFixtures[3].ratedMovies.put(10L, 3);
+  	
+  	usersFixtures[4].ratedMovies.put(1L, 3);
+  	usersFixtures[4].ratedMovies.put(2L, 1);
+  	usersFixtures[4].ratedMovies.put(3L, 1);
+  	usersFixtures[4].ratedMovies.put(4L, -5);
+  	usersFixtures[4].ratedMovies.put(5L, -3);
+  	usersFixtures[4].ratedMovies.put(7L, 3);
+  	usersFixtures[4].ratedMovies.put(8L, 1);
+  	usersFixtures[4].ratedMovies.put(9L, -5);
+  	usersFixtures[4].ratedMovies.put(10L, -5); 	
+  }
+
 }

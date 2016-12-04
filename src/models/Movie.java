@@ -11,7 +11,7 @@ public class Movie
 {
 	public String title, url;
 	public int year;
-	public long movieId, userRatingsId;
+	public long movieId;//, userRatingsId;
 	
 	public static long counter = 1l;
 	

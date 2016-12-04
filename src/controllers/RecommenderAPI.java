@@ -64,10 +64,38 @@ public class RecommenderAPI
 	{
 		long userId = users.size() + 1;
 		User user = new User(userId, firstName, lastName, age, gender, occupation, username, password);
-		//user.username = username;
-		//user.password = password;
 		users.put(user.userId, user);
 		return user;
+	}
+	
+	public Movie addMovie(String title, int year, String url)
+	{
+		long movieId = movies.size() + 1;
+		Movie movie = new Movie(movieId, title, year, url);
+		movies.put(movieId, movie);
+		return movie;
+	}
+	
+	public Rating addRating(long userId, long movieId, int rating)
+	{
+		Rating r = new Rating(userId, movieId, rating);
+		ratings.add(r);
+		return r;
+	}
+	
+	public List<Rating> getRatings()
+	{
+		return ratings;
+	}
+	
+	public Map<Long, Movie> getMovies()
+	{
+		return movies;
+	}
+	
+	public Movie getMovieById(Long id)
+	{
+		return movies.get(id);
 	}
 	
 	public Map<Long, User> getUsers()
@@ -84,31 +112,13 @@ public class RecommenderAPI
 //	{
 //		return 
 //	}
-	public Long getUsersSize()
-	{
-		return (long) users.size();
-	}
+
 //	public void removeUser(userId)
 //	{
 //		
 //	}
 //	
-//	public Movie addMovie(title, year, url)
-//	{
-//		
-//		return movie;
-//	}
-	
-//	public Rating addRating(userId, movieId, rating)
-//	{
-//		
-//	}
-//	
-//	public Movie getMovie(movieId)
-//	{
-//		
-//	}
-//	
+
 //	public Rating getUserRatings(userId)
 //	{
 //		
