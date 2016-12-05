@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jws.soap.SOAPBinding.Use;
+
 import models.Movie;
 import models.Rating;
 import models.User;
@@ -68,6 +70,11 @@ public class RecommenderAPI
 		return user;
 	}
 	
+	public void removeUser(long userId)
+	{
+		users.remove(userId);
+	}
+	
 	public Movie addMovie(String title, int year, String url)
 	{
 		long movieId = movies.size() + 1;
@@ -93,7 +100,7 @@ public class RecommenderAPI
 		return movies;
 	}
 	
-	public Movie getMovieById(Long id)
+	public Movie getMovieById(long id)
 	{
 		return movies.get(id);
 	}
@@ -103,34 +110,32 @@ public class RecommenderAPI
 		return users;
 	}
 	
-	public User getUserById(Long id)
+	public User getUserById(long id)
 	{
 		return users.get(id);
 	}
+
+	public Map<Long, Integer> getUserRatings(long userId)
+	{
+		User user = getUserById(userId);
+		return user.ratedMovies;
+	}
 	
-//	public User getUserByUsername(String username)
-//	{
-//		return 
-//	}
+	public List<String> getTopTenMovies(long userId)
+	{
+		return null;
+	}
 
-//	public void removeUser(userId)
-//	{
-//		
-//	}
-//	
 
-//	public Rating getUserRatings(userId)
-//	{
-//		
-//	}
-//	
 //	public List<String> getUserRecommendations(userId)
 //	{
 //		
 //	}
-//	
-//	public List<String> getTopTenMovies(userId)
-//	{
-//		
-//	}
+
+
+	
+//public User getUserByUsername(String username)
+//{
+//	return 
+//}
 }

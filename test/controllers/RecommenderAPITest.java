@@ -61,6 +61,15 @@ public class RecommenderAPITest
 	}
 	
 	@Test
+	public void testRemoveUser()
+	{
+		assertEquals(usersFixtures.length, recommender.getUsers().size());
+		User user = recommender.getUserById(4L);
+		recommender.removeUser(user.userId);
+		assertEquals(usersFixtures.length - 1, recommender.getUsers().size());
+	}
+	
+	@Test
 	public void testUsers()
 	{
 		for (User user: usersFixtures)
@@ -111,5 +120,13 @@ public class RecommenderAPITest
 			assertEquals(r.rating, userRating);
 
 		}
+	}
+	
+	@Test
+	public void testGetUserRatings()
+	{
+		User user = usersFixtures[0];
+		assertEquals(user.ratedMovies.size(), recommender.getUserById(user.userId).ratedMovies.size());
+		assertEquals(user.ratedMovies.get(1), recommender.getUserById(user.userId).ratedMovies.get(1));
 	}
 }
