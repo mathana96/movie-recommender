@@ -2,7 +2,8 @@ package controllers;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,16 +23,17 @@ public class RecommenderAPITest
 {
 	private RecommenderAPI recommender;
 	private Fixtures f; 
-	
+
 	@Before
 	public void setUp() throws Exception
 	{
 		recommender = new RecommenderAPI();
 		f = new Fixtures();
+
 		for (User user: usersFixtures)
 		{
 			recommender.addUser(user.firstName, user.lastName, user.age, user.gender, 
-													user.occupation, user.username, user.password);
+					user.occupation, user.username, user.password);
 		}
 		for (Movie movie: moviesFixtures)
 		{
@@ -41,6 +43,9 @@ public class RecommenderAPITest
 		{
 			recommender.addRating(r.userId, r.movieId, r.rating);
 		}
+		
+		f.userRatingsFixtures();
+		f.ratedMoviesFixtures();
 	}
 
 	@After
@@ -59,7 +64,7 @@ public class RecommenderAPITest
 		long newUserId = usersFixtures.length + 1;
 		assertEquals("Joe", recommender.getUserById(newUserId).firstName);
 	}
-	
+
 	@Test
 	public void testRemoveUser()
 	{
@@ -68,7 +73,7 @@ public class RecommenderAPITest
 		recommender.removeUser(user.userId);
 		assertEquals(usersFixtures.length - 1, recommender.getUsers().size());
 	}
-	
+
 	@Test
 	public void testUsers()
 	{
@@ -78,7 +83,7 @@ public class RecommenderAPITest
 			assertNotSame(user, recommender.getUserById(user.userId));
 		}
 	}
-	
+
 	@Test
 	public void testMovie()
 	{
@@ -89,7 +94,7 @@ public class RecommenderAPITest
 		long newMovieId = moviesFixtures.length + 1;
 		assertEquals("The Godfather", recommender.getMovieById(newMovieId).title);
 	}
-	
+
 	@Test
 	public void testMovies()
 	{
@@ -99,20 +104,21 @@ public class RecommenderAPITest
 			assertNotSame(movie, recommender.getMovieById(movie.movieId));
 		}
 	}
-	
+
 	@Test
 	public void testRating()
 	{
 		assertEquals(ratingsFixtures.length, recommender.getRatings().size());
-		recommender.addRating(20L, 40L, 5);
+		User user = usersFixtures[0];
+		Movie movie = moviesFixtures[0];
+		recommender.addRating(user.userId, movie.movieId, 5);
 		assertEquals(ratingsFixtures.length + 1, recommender.getRatings().size());
 		assertEquals(ratingsFixtures[0].movieId, recommender.getMovieById(ratingsFixtures[0].movieId).movieId);		
 	}
-	
+
 	@Test
 	public void testRatings()
 	{
-		f.ratedMoviesFixtures();
 		for (Rating r: ratingsFixtures)
 		{
 			User user = usersFixtures[(int) r.userId - 1];
@@ -121,12 +127,32 @@ public class RecommenderAPITest
 
 		}
 	}
-	
+
 	@Test
 	public void testGetUserRatings()
 	{
 		User user = usersFixtures[0];
 		assertEquals(user.ratedMovies.size(), recommender.getUserById(user.userId).ratedMovies.size());
 		assertEquals(user.ratedMovies.get(1), recommender.getUserById(user.userId).ratedMovies.get(1));
+	}
+
+	@Test
+	public void testGetTopTen()
+	{
+		recommender.addMovie("The Godfather", 1972, "http://www.imdb.com/title/tt0068646/");
+		assertEquals(moviesFixtures.length + 1, recommender.getMovies().size()); //Adding another movie to make it 11
+		
+		List<Rating> topTen = recommender.getTopTenMovies();
+		assertEquals(10, topTen.size()); //Assure only 10 movies printed
+		
+		assertEquals(topTen.get(0).movieId, moviesFixtures[0].movieId);
+		assertEquals(topTen.get(0).averageRating, 3.4, 0.001);
+		assertEquals(topTen.get(1).movieId, moviesFixtures[7].movieId);
+		assertEquals(topTen.get(1).averageRating, 3.0, 0.001);
+		assertEquals(topTen.get(2).movieId, moviesFixtures[2].movieId);
+		assertEquals(topTen.get(2).averageRating, 1.8, 0.001);
+		assertEquals(topTen.get(3).movieId, moviesFixtures[9].movieId);
+		assertEquals(topTen.get(3).averageRating, 1.5, 0.001);
+		
 	}
 }

@@ -8,6 +8,7 @@ public class Rating
 {
 	public long userId, movieId, timestamp;
 	public Integer rating;
+	public double averageRating;
 
 	public Rating(long userId, long movieId, Integer rating, long timestamp)
 	{
@@ -23,13 +24,18 @@ public class Rating
 		this.movieId = movieId;
 		this.rating = rating;
 	}
-
+	
+	public Rating(long movieId, double averageRating)
+	{
+		this.movieId = movieId;
+		this.averageRating = averageRating;
+	}
 	public String toString()
 	{
 		return toStringHelper(this).addValue(userId)
 				.addValue(movieId)
 				.addValue(rating)
-				.addValue(timestamp)
+				//.addValue(timestamp)
 				.toString();
 	}
 

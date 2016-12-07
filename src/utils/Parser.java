@@ -4,10 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import edu.princeton.cs.introcs.In;
 import models.Movie;
@@ -139,15 +137,15 @@ public class Parser
 		
 		
 		//Adds respective ratings to users and movies
-		for (int i=0; i<ratingsFiltered.size(); i++)
+		for (Rating rating: ratingsFiltered)
 		{
-			Rating rating = ratingsFiltered.get(i);
 			User user = getUser(rating.userId);
 			Movie movie = getMovie(rating.movieId);
 
 			user.addRatedMovies(movie.movieId, rating.rating);
 			movie.addUserRatings(user.userId, rating.rating);
-//			System.out.println(user.firstName + " " + user.ratedMovies);
+//			movie.addAverageRating(rating.rating);
+//			System.out.println(movie.title + " " + movie.userRatings);
 		}
 	
 		return ratingsFiltered;

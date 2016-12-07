@@ -112,4 +112,53 @@ public class Fixtures
   	usersFixtures[4].ratedMovies.put(10L, -5); 	
   }
 
+  public void userRatingsFixtures()
+  {
+  	moviesFixtures[0].userRatings.put(1L, 5);
+  	moviesFixtures[0].userRatings.put(2L, 1);
+  	moviesFixtures[0].userRatings.put(3L, 3);
+  	moviesFixtures[0].userRatings.put(4L, 5);
+  	moviesFixtures[0].userRatings.put(5L, 3);
+  	
+  	moviesFixtures[1].userRatings.put(1L, 5);
+  	moviesFixtures[1].userRatings.put(2L, 3);
+  	moviesFixtures[1].userRatings.put(3L, -5);
+  	moviesFixtures[1].userRatings.put(5L, 1);
+  	
+  	moviesFixtures[2].userRatings.put(1L, 3);
+  	moviesFixtures[2].userRatings.put(2L, 3);
+  	moviesFixtures[2].userRatings.put(3L, -3);
+  	moviesFixtures[2].userRatings.put(4L, 5);
+  	moviesFixtures[2].userRatings.put(5L, 1);
+  	
+  	moviesFixtures[3].userRatings.put(2L, -5);
+  	moviesFixtures[3].userRatings.put(3L, -3);
+  	moviesFixtures[3].userRatings.put(4L, 5);
+  	moviesFixtures[3].userRatings.put(5L, -5);
+  	
+  	moviesFixtures[4].userRatings.put(1L, 3);
+  	moviesFixtures[4].userRatings.put(3L, -5);
+  	moviesFixtures[4].userRatings.put(5L, -3);
+  	
+  	moviesFixtures[5].userRatings.put(4L, 1);
+  	
+  	moviesFixtures[6].userRatings.put(1L, 1);
+  	moviesFixtures[6].userRatings.put(2L, 3);
+  	moviesFixtures[6].userRatings.put(3L, -5);
+  	moviesFixtures[6].userRatings.put(4L, 3);
+  	moviesFixtures[6].userRatings.put(5L, 3);
+  	
+  	moviesFixtures[7].userRatings.put(3L, 5);
+  	moviesFixtures[7].userRatings.put(4L, 3);
+  	moviesFixtures[7].userRatings.put(5L, 1);
+ 
+  	moviesFixtures[8].userRatings.put(1L, 1);
+  	moviesFixtures[8].userRatings.put(5L, -5);
+
+  	moviesFixtures[9].userRatings.put(1L, 3);
+  	moviesFixtures[9].userRatings.put(2L, 5);
+  	moviesFixtures[9].userRatings.put(4L, 3);
+  	moviesFixtures[9].userRatings.put(5L, -5);
+  }
+  
 }

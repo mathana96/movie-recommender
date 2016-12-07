@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,8 @@ import models.Movie;
 import models.Rating;
 import models.User;
 import utils.Parser;
+import utils.RatingByRatingComparator;
+import utils.RatingByTimeComparator;
 import utils.Serializer;
 
 public class RecommenderAPI
@@ -21,7 +24,8 @@ public class RecommenderAPI
 	Map<Long, Movie> movies = new HashMap<>();
 	List<Rating> ratings = new ArrayList<>();
 	Parser parser;
-	
+	RatingByRatingComparator comparator;
+
 	public RecommenderAPI()
 	{}
 	
@@ -86,7 +90,14 @@ public class RecommenderAPI
 	public Rating addRating(long userId, long movieId, int rating)
 	{
 		Rating r = new Rating(userId, movieId, rating);
+		User user = getUserById(r.userId);
+		Movie movie = getMovieById(r.movieId);
+
+		user.addRatedMovies(movie.movieId, r.rating);
+		movie.addUserRatings(user.userId, r.rating);
+//		movie.addAverageRating(r.rating);
 		ratings.add(r);
+		
 		return r;
 	}
 	
@@ -121,9 +132,26 @@ public class RecommenderAPI
 		return user.ratedMovies;
 	}
 	
-	public List<String> getTopTenMovies(long userId)
+	public List<Rating> getTopTenMovies()
 	{
-		return null;
+		comparator = new RatingByRatingComparator();
+		List<Rating> topTen = new ArrayList<>();
+		
+		for(Movie movie: movies.values())
+		{
+			topTen.add(new Rating(movie.movieId, movie.getAverageRating()));
+		}
+		Collections.sort(topTen, comparator);
+		
+//		System.out.println("Movie id " + topTen.get(0).movieId + "Avg " + topTen.get(0).averageRating);
+		if (topTen.size() > 10)
+		{
+			return topTen.subList(0, 10);
+		}
+		else
+		{
+			return topTen;
+		}
 	}
 
 
