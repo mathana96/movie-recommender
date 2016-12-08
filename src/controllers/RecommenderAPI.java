@@ -3,17 +3,18 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import javax.jws.soap.SOAPBinding.Use;
 
 import models.Movie;
 import models.Rating;
 import models.User;
+import utils.MovieAverageRatingComparator;
 import utils.Parser;
 import utils.RatingByRatingComparator;
-import utils.RatingByTimeComparator;
 import utils.Serializer;
 
 public class RecommenderAPI
@@ -24,7 +25,8 @@ public class RecommenderAPI
 	Map<Long, Movie> movies = new HashMap<>();
 	List<Rating> ratings = new ArrayList<>();
 	Parser parser;
-	RatingByRatingComparator comparator;
+	RatingByRatingComparator ratingComparator;
+	MovieAverageRatingComparator movieAvgComparator;
 
 	public RecommenderAPI()
 	{}
@@ -101,18 +103,11 @@ public class RecommenderAPI
 		return r;
 	}
 	
-	public List<Rating> getTopTenMovies()
+	public List<Movie> getTopTenMovies()
 	{
-		comparator = new RatingByRatingComparator();
-		List<Rating> topTen = new ArrayList<>();
-		
-		for(Movie movie: movies.values())
-		{
-			topTen.add(new Rating(movie.movieId, movie.getAverageRating()));
-		}
-		Collections.sort(topTen, comparator);
-		
-//		System.out.println("Movie id " + topTen.get(0).movieId + "Avg " + topTen.get(0).averageRating);
+		List<Movie> topTen = new ArrayList<>(movies.values());
+		movieAvgComparator = new MovieAverageRatingComparator();
+		Collections.sort(topTen, movieAvgComparator);
 		if (topTen.size() > 10)
 		{
 			return topTen.subList(0, 10);
@@ -121,6 +116,57 @@ public class RecommenderAPI
 		{
 			return topTen;
 		}
+	}
+	public List<Movie> getUserRecommendations(long userId)
+	{
+		ratingComparator = new RatingByRatingComparator(); //Sorts highest to lowest rating
+		movieAvgComparator = new MovieAverageRatingComparator(); //Sorts highest to lowest rating average of a movie
+		HashSet<User> targetUsers = new HashSet<>();
+		Set<Movie> recommendedMoviesSet = new HashSet<>();
+		
+		User currentUser = getUserById(userId);
+		List<Rating> currentUserRatings = new ArrayList<>(currentUser.ratedMovies.values());
+		
+		Collections.sort(currentUserRatings, ratingComparator);
+		
+		for (Rating currentUserRating: currentUserRatings)
+		{
+			if(currentUserRating.rating >= 3)
+			{
+				Movie movie = getMovieById(currentUserRating.movieId);
+				List<Rating> topUserRatings = new ArrayList<>(movie.userRatings.values());
+				Collections.sort(topUserRatings, ratingComparator);
+				for (Rating otherUserRating: topUserRatings)
+				{
+					if (otherUserRating.rating >= currentUserRating.rating)
+					{
+						targetUsers.add(getUserById(otherUserRating.userId));
+					}
+				}
+			}
+	
+		}
+		//For each of the narrowed down target users, each with their own list/map of rated movies
+		for (User target: targetUsers)
+		{
+			List<Rating> targetRatedMovies = new ArrayList<>(target.ratedMovies.values());
+			Collections.sort(targetRatedMovies, ratingComparator);
+			
+			for (Rating targetRating: targetRatedMovies)
+			{
+				//If above 3 and the movie has not been rated before
+				if (targetRating.rating >= 3 && !currentUser.ratedMovies.containsKey(targetRating.movieId))
+				{
+					Movie movie = getMovieById(targetRating.movieId);
+					recommendedMoviesSet.add(movie); //Using a set to ensure no duplicates
+					
+				}
+			}
+		}
+		List<Movie> recommendedMoviesList = new ArrayList<>(recommendedMoviesSet);
+		Collections.sort(recommendedMoviesList, movieAvgComparator); //Sort final results with best first
+		System.out.println(recommendedMoviesList);
+		return recommendedMoviesList;
 	}
 	
 	public List<Rating> getRatings()
@@ -152,13 +198,6 @@ public class RecommenderAPI
 	{
 		User user = getUserById(userId);
 		return user.ratedMovies;
-	}
-
-	public List<String> getUserRecommendations(long userId)
-	{
-		User currentUser = getUserById(userId);
-		 
-		return null;
 	}
 
 

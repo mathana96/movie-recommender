@@ -12,7 +12,6 @@ public class Movie
 	public String title, url;
 	public int year;
 	public long movieId;//, userRatingsId;
-	public double averageRating;
 	
 	public static long counter = 1l;
 
@@ -33,27 +32,26 @@ public class Movie
 
 	public double getAverageRating()
 	{
+		double totalRating = 0.0; 
+		double averageRating = 0.0;
+
 		for (Rating rating: userRatings.values())
 		{
-			averageRating += rating.rating;
+			totalRating += rating.rating;
 		}
 		if (userRatings.size() > 0)
 		{
-			return averageRating/userRatings.size();
+			return averageRating = totalRating/userRatings.size();
 		}
-		else
-		{
-			return 0.0;
-		}
-		
+		return averageRating;
 	}
 	
 	public String toString()
 	{
 		return toStringHelper(this).addValue(movieId)
 				.addValue(title)
-				.addValue(year)
-				.addValue(url)
+//				.addValue(year)
+//				.addValue(url)
 				.toString();
 	}
 

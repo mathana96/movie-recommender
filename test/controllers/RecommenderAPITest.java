@@ -142,17 +142,26 @@ public class RecommenderAPITest
 		recommender.addMovie("The Godfather", 1972, "http://www.imdb.com/title/tt0068646/");
 		assertEquals(moviesFixtures.length + 1, recommender.getMovies().size()); //Adding another movie to make it 11
 		
-		List<Rating> topTen = recommender.getTopTenMovies();
+		List<Movie> topTen = recommender.getTopTenMovies();
 		assertEquals(10, topTen.size()); //Assure only 10 movies printed
 		
 		assertEquals(topTen.get(0).movieId, moviesFixtures[0].movieId);
-		assertEquals(topTen.get(0).averageRating, 3.4, 0.001);
+		assertEquals(topTen.get(0).getAverageRating(), 3.4, 0.001);
 		assertEquals(topTen.get(1).movieId, moviesFixtures[7].movieId);
-		assertEquals(topTen.get(1).averageRating, 3.0, 0.001);
+		assertEquals(topTen.get(1).getAverageRating(), 3.0, 0.001);
 		assertEquals(topTen.get(2).movieId, moviesFixtures[2].movieId);
-		assertEquals(topTen.get(2).averageRating, 1.8, 0.001);
+		assertEquals(topTen.get(2).getAverageRating(), 1.8, 0.001);
 		assertEquals(topTen.get(3).movieId, moviesFixtures[9].movieId);
-		assertEquals(topTen.get(3).averageRating, 1.5, 0.001);
+		assertEquals(topTen.get(3).getAverageRating(), 1.5, 0.001);
 		
+	}
+	
+	@Test
+	public void testGetUserRecommendations()
+	{
+//		recommender.addUser("Joe", "Bloggs", 54, 'M', "Network Administrator", "jbloggs", "secret");
+//		User user = recommender.getUserById(6L);
+//		recommender.addRating(user.userId, 1L, );
+		recommender.getUserRecommendations(usersFixtures[3].userId);
 	}
 }
