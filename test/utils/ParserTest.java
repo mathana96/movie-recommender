@@ -76,8 +76,8 @@ public class ParserTest
 		Movie movie = parser.getMovie(rating.movieId);
 		User user = parser.getUser(rating.userId);
 		
-		int userRating = user.ratedMovies.get(movie.movieId);
-		int movieRating = movie.userRatings.get(user.userId);
+		int userRating = user.ratedMovies.get(movie.movieId).rating;
+		int movieRating = movie.userRatings.get(user.userId).rating;
 		
 		assertEquals(userRating, movieRating);
 	}

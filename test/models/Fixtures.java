@@ -70,95 +70,95 @@ public class Fixtures
   public void ratedMoviesFixtures()
   {
   	
-  	usersFixtures[0].ratedMovies.put(1L, 5);
-  	usersFixtures[0].ratedMovies.put(2L, 5);
-  	usersFixtures[0].ratedMovies.put(3L, 3);
-  	usersFixtures[0].ratedMovies.put(5L, 3);
-  	usersFixtures[0].ratedMovies.put(7L, 1);
-  	usersFixtures[0].ratedMovies.put(9L, 1);
-  	usersFixtures[0].ratedMovies.put(10L, 3);
+  	usersFixtures[0].ratedMovies.put(1L, new Rating(1L, 1L, 5));
+  	usersFixtures[0].ratedMovies.put(2L, new Rating(1L, 2L, 5));
+  	usersFixtures[0].ratedMovies.put(3L, new Rating(1L, 3L, 3));
+  	usersFixtures[0].ratedMovies.put(5L, new Rating(1L, 5L, 3));
+  	usersFixtures[0].ratedMovies.put(7L, new Rating(1L, 7L, 1));
+  	usersFixtures[0].ratedMovies.put(9L, new Rating(1L, 9L, 1));
+  	usersFixtures[0].ratedMovies.put(10L, new Rating(1L, 10L, 3));
   	
-  	usersFixtures[1].ratedMovies.put(1L, 1);
-  	usersFixtures[1].ratedMovies.put(2L, 3);
-  	usersFixtures[1].ratedMovies.put(3L, 3);
-  	usersFixtures[1].ratedMovies.put(4L, -5);
-  	usersFixtures[1].ratedMovies.put(7L, 3);
-  	usersFixtures[1].ratedMovies.put(10L, 5);
+  	usersFixtures[1].ratedMovies.put(1L, new Rating(2L, 1L, 1));
+  	usersFixtures[1].ratedMovies.put(2L, new Rating(2L, 2L, 3));
+  	usersFixtures[1].ratedMovies.put(3L, new Rating(2L, 3L, 3));
+  	usersFixtures[1].ratedMovies.put(4L, new Rating(2L, 4L, -5));
+  	usersFixtures[1].ratedMovies.put(7L, new Rating(2L, 7L, 3));
+  	usersFixtures[1].ratedMovies.put(10L, new Rating(2L, 10L, 5));
   	
-  	usersFixtures[2].ratedMovies.put(1L, 3);
-  	usersFixtures[2].ratedMovies.put(2L, -5);
-  	usersFixtures[2].ratedMovies.put(3L, -3);
-  	usersFixtures[2].ratedMovies.put(4L, -3);
-  	usersFixtures[2].ratedMovies.put(5L, -5);
-  	usersFixtures[2].ratedMovies.put(7L, -5);
-  	usersFixtures[2].ratedMovies.put(8L, 5);
+  	usersFixtures[2].ratedMovies.put(1L, new Rating(3L, 1L, 3));
+  	usersFixtures[2].ratedMovies.put(2L, new Rating(3L, 2L, -5));
+  	usersFixtures[2].ratedMovies.put(3L, new Rating(3L, 3L, -3));
+  	usersFixtures[2].ratedMovies.put(4L, new Rating(3L, 4L, -3));
+  	usersFixtures[2].ratedMovies.put(5L, new Rating(3L, 5L, -5));
+  	usersFixtures[2].ratedMovies.put(7L, new Rating(3L, 7L, -5));
+  	usersFixtures[2].ratedMovies.put(8L, new Rating(3L, 8L, 5));
   	
-  	usersFixtures[3].ratedMovies.put(1L, 5);
-  	usersFixtures[3].ratedMovies.put(3L, 5);
-  	usersFixtures[3].ratedMovies.put(4L, 5);
-  	usersFixtures[3].ratedMovies.put(6L, 1);
-  	usersFixtures[3].ratedMovies.put(7L, 3);
-  	usersFixtures[3].ratedMovies.put(8L, 3);
-  	usersFixtures[3].ratedMovies.put(10L, 3);
+  	usersFixtures[3].ratedMovies.put(1L, new Rating(4L, 1L, 5));
+  	usersFixtures[3].ratedMovies.put(3L, new Rating(4L, 3L, 5));
+  	usersFixtures[3].ratedMovies.put(4L, new Rating(4L, 4L, 5));
+  	usersFixtures[3].ratedMovies.put(6L, new Rating(4L, 6L, 1));
+  	usersFixtures[3].ratedMovies.put(7L, new Rating(4L, 7L, 3));
+  	usersFixtures[3].ratedMovies.put(8L, new Rating(4L, 8L, 3));
+  	usersFixtures[3].ratedMovies.put(10L, new Rating(4L, 10L, 3));
   	
-  	usersFixtures[4].ratedMovies.put(1L, 3);
-  	usersFixtures[4].ratedMovies.put(2L, 1);
-  	usersFixtures[4].ratedMovies.put(3L, 1);
-  	usersFixtures[4].ratedMovies.put(4L, -5);
-  	usersFixtures[4].ratedMovies.put(5L, -3);
-  	usersFixtures[4].ratedMovies.put(7L, 3);
-  	usersFixtures[4].ratedMovies.put(8L, 1);
-  	usersFixtures[4].ratedMovies.put(9L, -5);
-  	usersFixtures[4].ratedMovies.put(10L, -5); 	
+  	usersFixtures[4].ratedMovies.put(1L, new Rating(5L, 1L, 3));
+  	usersFixtures[4].ratedMovies.put(2L, new Rating(5L, 2L, 1));
+  	usersFixtures[4].ratedMovies.put(3L, new Rating(5L, 3L, 1));
+  	usersFixtures[4].ratedMovies.put(4L, new Rating(5L, 4L, -5));
+  	usersFixtures[4].ratedMovies.put(5L, new Rating(5L, 5L, -3));
+  	usersFixtures[4].ratedMovies.put(7L, new Rating(5L, 7L, 3));
+  	usersFixtures[4].ratedMovies.put(8L, new Rating(5L, 8L, 1));
+  	usersFixtures[4].ratedMovies.put(9L, new Rating(5L, 9L, -5));
+  	usersFixtures[4].ratedMovies.put(10L, new Rating(5L, 10L, -5)); 	
   }
 
   public void userRatingsFixtures()
   {
-  	moviesFixtures[0].userRatings.put(1L, 5);
-  	moviesFixtures[0].userRatings.put(2L, 1);
-  	moviesFixtures[0].userRatings.put(3L, 3);
-  	moviesFixtures[0].userRatings.put(4L, 5);
-  	moviesFixtures[0].userRatings.put(5L, 3);
+  	moviesFixtures[0].userRatings.put(1L, new Rating(1, moviesFixtures[0].movieId, 5));
+  	moviesFixtures[0].userRatings.put(2L, new Rating(2, moviesFixtures[0].movieId, 1));
+  	moviesFixtures[0].userRatings.put(3L, new Rating(3, moviesFixtures[0].movieId, 3));
+  	moviesFixtures[0].userRatings.put(4L, new Rating(4, moviesFixtures[0].movieId, 5));
+  	moviesFixtures[0].userRatings.put(5L, new Rating(5, moviesFixtures[0].movieId, 3));
   	
-  	moviesFixtures[1].userRatings.put(1L, 5);
-  	moviesFixtures[1].userRatings.put(2L, 3);
-  	moviesFixtures[1].userRatings.put(3L, -5);
-  	moviesFixtures[1].userRatings.put(5L, 1);
+  	moviesFixtures[1].userRatings.put(1L, new Rating(1, moviesFixtures[1].movieId, 5));
+  	moviesFixtures[1].userRatings.put(2L, new Rating(2, moviesFixtures[1].movieId, 3));
+  	moviesFixtures[1].userRatings.put(3L, new Rating(3, moviesFixtures[1].movieId, -5));
+  	moviesFixtures[1].userRatings.put(5L, new Rating(5, moviesFixtures[1].movieId, 1));
   	
-  	moviesFixtures[2].userRatings.put(1L, 3);
-  	moviesFixtures[2].userRatings.put(2L, 3);
-  	moviesFixtures[2].userRatings.put(3L, -3);
-  	moviesFixtures[2].userRatings.put(4L, 5);
-  	moviesFixtures[2].userRatings.put(5L, 1);
+  	moviesFixtures[2].userRatings.put(1L, new Rating(1, moviesFixtures[2].movieId, 3));
+  	moviesFixtures[2].userRatings.put(2L, new Rating(2, moviesFixtures[2].movieId, 3));
+  	moviesFixtures[2].userRatings.put(3L, new Rating(3, moviesFixtures[2].movieId, -3));
+  	moviesFixtures[2].userRatings.put(4L, new Rating(4, moviesFixtures[2].movieId, 5));
+  	moviesFixtures[2].userRatings.put(5L, new Rating(5, moviesFixtures[2].movieId, 1));
   	
-  	moviesFixtures[3].userRatings.put(2L, -5);
-  	moviesFixtures[3].userRatings.put(3L, -3);
-  	moviesFixtures[3].userRatings.put(4L, 5);
-  	moviesFixtures[3].userRatings.put(5L, -5);
+  	moviesFixtures[3].userRatings.put(2L, new Rating(2, moviesFixtures[3].movieId, -5));
+  	moviesFixtures[3].userRatings.put(3L, new Rating(3, moviesFixtures[3].movieId, -3));
+  	moviesFixtures[3].userRatings.put(4L, new Rating(4, moviesFixtures[3].movieId, 5));
+  	moviesFixtures[3].userRatings.put(5L, new Rating(5, moviesFixtures[3].movieId, -5));
   	
-  	moviesFixtures[4].userRatings.put(1L, 3);
-  	moviesFixtures[4].userRatings.put(3L, -5);
-  	moviesFixtures[4].userRatings.put(5L, -3);
+  	moviesFixtures[4].userRatings.put(1L, new Rating(1, moviesFixtures[4].movieId, 3));
+  	moviesFixtures[4].userRatings.put(3L, new Rating(3, moviesFixtures[4].movieId, -5));
+  	moviesFixtures[4].userRatings.put(5L, new Rating(5, moviesFixtures[4].movieId, -3));
   	
-  	moviesFixtures[5].userRatings.put(4L, 1);
+  	moviesFixtures[5].userRatings.put(4L, new Rating(4, moviesFixtures[5].movieId, 1));
   	
-  	moviesFixtures[6].userRatings.put(1L, 1);
-  	moviesFixtures[6].userRatings.put(2L, 3);
-  	moviesFixtures[6].userRatings.put(3L, -5);
-  	moviesFixtures[6].userRatings.put(4L, 3);
-  	moviesFixtures[6].userRatings.put(5L, 3);
+  	moviesFixtures[6].userRatings.put(1L, new Rating(1, moviesFixtures[6].movieId, 1));
+  	moviesFixtures[6].userRatings.put(2L, new Rating(2, moviesFixtures[6].movieId, 3));
+  	moviesFixtures[6].userRatings.put(3L, new Rating(3, moviesFixtures[6].movieId, -5));
+  	moviesFixtures[6].userRatings.put(4L, new Rating(4, moviesFixtures[6].movieId, 3));
+  	moviesFixtures[6].userRatings.put(5L, new Rating(5, moviesFixtures[6].movieId, 3));
   	
-  	moviesFixtures[7].userRatings.put(3L, 5);
-  	moviesFixtures[7].userRatings.put(4L, 3);
-  	moviesFixtures[7].userRatings.put(5L, 1);
+  	moviesFixtures[7].userRatings.put(3L, new Rating(3, moviesFixtures[7].movieId, 5));
+  	moviesFixtures[7].userRatings.put(4L, new Rating(4, moviesFixtures[7].movieId, 3));
+  	moviesFixtures[7].userRatings.put(5L, new Rating(5, moviesFixtures[7].movieId, 1));
  
-  	moviesFixtures[8].userRatings.put(1L, 1);
-  	moviesFixtures[8].userRatings.put(5L, -5);
+  	moviesFixtures[8].userRatings.put(1L, new Rating(1, moviesFixtures[8].movieId, 1));
+  	moviesFixtures[8].userRatings.put(5L, new Rating(5, moviesFixtures[8].movieId, -5));
 
-  	moviesFixtures[9].userRatings.put(1L, 3);
-  	moviesFixtures[9].userRatings.put(2L, 5);
-  	moviesFixtures[9].userRatings.put(4L, 3);
-  	moviesFixtures[9].userRatings.put(5L, -5);
+  	moviesFixtures[9].userRatings.put(1L, new Rating(1, moviesFixtures[9].movieId, 3));
+  	moviesFixtures[9].userRatings.put(2L, new Rating(2, moviesFixtures[9].movieId, 5));
+  	moviesFixtures[9].userRatings.put(4L, new Rating(4, moviesFixtures[9].movieId, 3));
+  	moviesFixtures[9].userRatings.put(5L, new Rating(5, moviesFixtures[9].movieId, -5));
   }
   
 }

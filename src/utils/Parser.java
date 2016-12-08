@@ -141,9 +141,10 @@ public class Parser
 		{
 			User user = getUser(rating.userId);
 			Movie movie = getMovie(rating.movieId);
-
-			user.addRatedMovies(movie.movieId, rating.rating);
-			movie.addUserRatings(user.userId, rating.rating);
+			Rating r = new Rating(user.userId, movie.movieId, rating.rating);
+			
+			user.addRatedMovies(movie.movieId, r);
+			movie.addUserRatings(user.userId, r);
 //			movie.addAverageRating(rating.rating);
 //			System.out.println(movie.title + " " + movie.userRatings);
 		}

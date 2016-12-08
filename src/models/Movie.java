@@ -16,7 +16,7 @@ public class Movie
 	
 	public static long counter = 1l;
 
-	public Map<Long, Integer> userRatings = new HashMap<>();
+	public Map<Long, Rating> userRatings = new HashMap<>();
 
 	public Movie(long movieId, String title, int year, String url)
 	{
@@ -26,22 +26,16 @@ public class Movie
 		this.url = url;
 	}
 
-	public void addUserRatings(Long userId, Integer rating)
+	public void addUserRatings(Long userId, Rating rating)
 	{
-		//userRatingsId = counter++;
 		userRatings.put(userId, rating);
 	}
 
-//	public void addAverageRating(int rating)
-//	{
-//		this.averageRating += rating;
-//	}
-
 	public double getAverageRating()
 	{
-		for (Integer rating: userRatings.values())
+		for (Rating rating: userRatings.values())
 		{
-			averageRating += rating;
+			averageRating += rating.rating;
 		}
 		if (userRatings.size() > 0)
 		{

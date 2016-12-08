@@ -93,12 +93,34 @@ public class RecommenderAPI
 		User user = getUserById(r.userId);
 		Movie movie = getMovieById(r.movieId);
 
-		user.addRatedMovies(movie.movieId, r.rating);
-		movie.addUserRatings(user.userId, r.rating);
+		user.addRatedMovies(movie.movieId, r);
+		movie.addUserRatings(user.userId, r);
 //		movie.addAverageRating(r.rating);
 		ratings.add(r);
 		
 		return r;
+	}
+	
+	public List<Rating> getTopTenMovies()
+	{
+		comparator = new RatingByRatingComparator();
+		List<Rating> topTen = new ArrayList<>();
+		
+		for(Movie movie: movies.values())
+		{
+			topTen.add(new Rating(movie.movieId, movie.getAverageRating()));
+		}
+		Collections.sort(topTen, comparator);
+		
+//		System.out.println("Movie id " + topTen.get(0).movieId + "Avg " + topTen.get(0).averageRating);
+		if (topTen.size() > 10)
+		{
+			return topTen.subList(0, 10);
+		}
+		else
+		{
+			return topTen;
+		}
 	}
 	
 	public List<Rating> getRatings()
@@ -126,39 +148,18 @@ public class RecommenderAPI
 		return users.get(id);
 	}
 
-	public Map<Long, Integer> getUserRatings(long userId)
+	public Map<Long, Rating> getUserRatings(long userId)
 	{
 		User user = getUserById(userId);
 		return user.ratedMovies;
 	}
-	
-	public List<Rating> getTopTenMovies()
+
+	public List<String> getUserRecommendations(long userId)
 	{
-		comparator = new RatingByRatingComparator();
-		List<Rating> topTen = new ArrayList<>();
-		
-		for(Movie movie: movies.values())
-		{
-			topTen.add(new Rating(movie.movieId, movie.getAverageRating()));
-		}
-		Collections.sort(topTen, comparator);
-		
-//		System.out.println("Movie id " + topTen.get(0).movieId + "Avg " + topTen.get(0).averageRating);
-		if (topTen.size() > 10)
-		{
-			return topTen.subList(0, 10);
-		}
-		else
-		{
-			return topTen;
-		}
+		User currentUser = getUserById(userId);
+		 
+		return null;
 	}
-
-
-//	public List<String> getUserRecommendations(userId)
-//	{
-//		
-//	}
 
 
 	

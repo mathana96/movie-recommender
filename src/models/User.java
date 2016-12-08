@@ -17,7 +17,7 @@ public class User
 	
 	public static long counter = 1l;
 	//Map of movie's and their rating. Using movie`id
-	public Map<Long, Integer> ratedMovies = new HashMap<>();
+	public Map<Long, Rating> ratedMovies = new HashMap<>();
 	
 	public User(long userId, String firstName, String lastName, 
 							int age, char gender, String occupation, String username, String password)
@@ -32,7 +32,7 @@ public class User
 		this.password = password;
 	}
 
-	public void addRatedMovies(Long movieId, Integer rating)
+	public void addRatedMovies(Long movieId, Rating rating)
 	{
 		//ratedMoviesId = counter++;
 		ratedMovies.put(movieId, rating);

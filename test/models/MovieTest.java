@@ -42,9 +42,9 @@ public class MovieTest
 	@Test
 	public void testGetAverageRating()
 	{
-		movie.addUserRatings(1L, 1);
-		movie.addUserRatings(2L, 3);
-		movie.addUserRatings(3L, 5);
+		movie.addUserRatings(1L, new Rating(1, movie.movieId, 1));
+		movie.addUserRatings(2L, new Rating(1, movie.movieId, 3));
+		movie.addUserRatings(3L, new Rating(1, movie.movieId, 5));
 		assertEquals(9.0/3, movie.getAverageRating(), 0.01);
 	}
 }

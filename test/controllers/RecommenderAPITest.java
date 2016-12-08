@@ -122,7 +122,7 @@ public class RecommenderAPITest
 		for (Rating r: ratingsFixtures)
 		{
 			User user = usersFixtures[(int) r.userId - 1];
-			Integer userRating = user.ratedMovies.get(r.movieId);		
+			Integer userRating = user.ratedMovies.get(r.movieId).rating;		
 			assertEquals(r.rating, userRating);
 
 		}
