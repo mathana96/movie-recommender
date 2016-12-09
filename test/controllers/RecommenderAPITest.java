@@ -2,7 +2,6 @@ package controllers;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -15,9 +14,6 @@ import models.Fixtures;
 import models.Movie;
 import models.Rating;
 import models.User;
-import utils.Parser;
-import utils.Serializer;
-import utils.XMLSerializer;
 
 public class RecommenderAPITest
 {
@@ -159,9 +155,19 @@ public class RecommenderAPITest
 	@Test
 	public void testGetUserRecommendations()
 	{
-//		recommender.addUser("Joe", "Bloggs", 54, 'M', "Network Administrator", "jbloggs", "secret");
-//		User user = recommender.getUserById(6L);
-//		recommender.addRating(user.userId, 1L, );
-		recommender.getUserRecommendations(usersFixtures[3].userId);
+		User user = recommender.getUserById(usersFixtures[4].userId);
+		List<Movie> recommendedMovies = recommender.getUserRecommendations(user.userId);
+		assertNotEquals(user.ratedMovies.size(), recommendedMovies.size());
+		assertTrue(!recommendedMovies.contains(user.ratedMovies.get(1)));
+		assertTrue(!recommendedMovies.contains(user.ratedMovies.get(4)));
+	}
+	
+	@Test
+	public void testAuthenticate()
+	{
+		recommender.addUser("Joe", "Bloggs", 54, 'M', "Network Administrator", "jbloggs", "secret");
+		assertTrue(recommender.authenticate("jbloggs", "secret"));
+		assertFalse(recommender.authenticate("Jbloggs", "Secret"));
+		assertFalse(recommender.authenticate("Hello", "PassLOL"));
 	}
 }

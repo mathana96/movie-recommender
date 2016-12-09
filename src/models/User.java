@@ -68,6 +68,7 @@ public class User
           && Objects.equal(age,  other.age)
           && Objects.equal(gender,  other.gender)
           && Objects.equal(occupation,  other.occupation)
+          && Objects.equal(ratedMovies,  other.ratedMovies)
           && Objects.equal(username,     other.username)
           && Objects.equal(password,  other.password);
     }

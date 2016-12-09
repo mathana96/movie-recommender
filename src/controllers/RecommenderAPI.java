@@ -22,6 +22,7 @@ public class RecommenderAPI
   private Serializer serializer;
   
 	Map<Long, User> users = new HashMap<>();
+	Map<String, User> usersLogin = new HashMap<>();
 	Map<Long, Movie> movies = new HashMap<>();
 	List<Rating> ratings = new ArrayList<>();
 	Parser parser;
@@ -57,12 +58,14 @@ public class RecommenderAPI
     serializer.read();
     ratings = (List<Rating>) serializer.pop();
     movies = (Map<Long, Movie>) serializer.pop();
+    usersLogin = (Map<String, User>) serializer.pop();
     users = (Map<Long, User>) serializer.pop();
   }
   
   public void store() throws Exception
   {
     serializer.push(users);
+    serializer.push(usersLogin);
     serializer.push(movies);
     serializer.push(ratings);
     serializer.write(); 
@@ -73,6 +76,7 @@ public class RecommenderAPI
 		long userId = users.size() + 1;
 		User user = new User(userId, firstName, lastName, age, gender, occupation, username, password);
 		users.put(user.userId, user);
+		usersLogin.put(user.username, user);
 		return user;
 	}
 	
@@ -97,7 +101,6 @@ public class RecommenderAPI
 
 		user.addRatedMovies(movie.movieId, r);
 		movie.addUserRatings(user.userId, r);
-//		movie.addAverageRating(r.rating);
 		ratings.add(r);
 		
 		return r;
@@ -169,6 +172,19 @@ public class RecommenderAPI
 		return recommendedMoviesList;
 	}
 	
+	public boolean authenticate(String username, String password)
+	{
+		if (usersLogin.containsKey(username))
+		{
+			User user = usersLogin.get(username);
+			if (user.password.matches(password))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public List<Rating> getRatings()
 	{
 		return ratings;
@@ -199,11 +215,4 @@ public class RecommenderAPI
 		User user = getUserById(userId);
 		return user.ratedMovies;
 	}
-
-
-	
-//public User getUserByUsername(String username)
-//{
-//	return 
-//}
 }
