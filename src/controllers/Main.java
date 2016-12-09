@@ -17,7 +17,8 @@ import utils.XMLSerializer;
 public class Main
 {
 	RecommenderAPI recommenderAPI;
-	Scanner input = new Scanner(System.in);
+	boolean authenticated = false;
+	//	Scanner input = new Scanner(System.in);
 
 
 	public Main() throws Exception
@@ -63,14 +64,16 @@ public class Main
 				StdOut.println("Please select the numerical options below\n");
 				StdOut.println("1) Login (for users with an account)");
 				StdOut.println("2) Signup");
+				StdOut.println("\n0) Exit system");
 
-				option = input.nextInt();
+
+				option = StdIn.readInt();
 
 				errorFree = true;
 			}
 			catch (Exception e)
 			{
-				input.nextLine();
+				StdIn.readLine();
 				StdOut.println("Your selection is incorrect or not available, please try again");	
 			}
 		}
@@ -85,7 +88,7 @@ public class Main
 		StdOut.println("\nWelcome to Movie-MattCher - a movie recommender just for you!"
 				+ "\nPress enter to continue");
 		StdIn.readLine();
-		
+
 		int loginOption = loginMenu();
 
 		while (loginOption != 0)
@@ -94,6 +97,7 @@ public class Main
 			{
 			case 1:
 				authenticate();
+				
 				break;
 
 			case 2:
@@ -104,33 +108,62 @@ public class Main
 			default:
 				StdOut.println("Your selection is incorrect or not available, please try again");
 			}
-			loginOption = loginMenu();
+			if (!authenticated)
+			{
+				loginOption = loginMenu();
+			}
+			else
+			{
+				break;
+			}
 		}
+		StdOut.println("Made it here. Get currentUser and store globally");
+		
 	}
 
 	public void addUser() throws Exception
 	{
-		input.nextLine(); //Bug fix
 
 		StdOut.println("Please key in your details as prompted\n");
 
 		StdOut.println("Your first name? ");
-		String firstName = input.nextLine();
+		String firstName = StdIn.readString();
 
 		StdOut.println("Enter your last name? ");
-		String lastName = input.nextLine();
+		String lastName = StdIn.readString();
 
-		StdOut.println("Your age? (It's confidential ;) )");
-		int age = input.nextInt();
-		input.nextLine(); //Consume newline leftover
+		boolean logicalAge = false;
+		int age = 0;
+		while (!logicalAge) 
+		{
+			try 
+			{
+				StdOut.println("Your age? (It's confidential ;) )");
+				age = StdIn.readInt();
+				if (age >=0 && age <=99)
+				{
+					logicalAge = true;
+				}
+				else
+				{
+					StdOut.println("You cannot possibly be negative aged!");
+				}
+			} 
+			catch (Exception e) 
+			{
+				StdIn.readString();
+				StdOut.println("Positive numerical inputs only!");
+			}
+		}
 
 		StdOut.println("Your gender? (M/F/N)");
-		char gender = input.next().charAt(0);
-		input.nextLine(); //Consume new line
+		char gender = StdIn.readChar();
+		StdIn.readString();
+
 
 
 		StdOut.println("Your occupation? ");
-		String occupation = input.nextLine();
+		String occupation = StdIn.readString();
 
 		boolean unique = false;
 		String username = null;
@@ -152,13 +185,29 @@ public class Main
 		String password = StdIn.readString();
 
 		recommenderAPI.addUser(firstName, lastName, age, gender, occupation, username, password);
-		recommenderAPI.store();
+		//		recommenderAPI.store();
 		StdOut.println("Your details have been logged!");
 	}
 
 	public void authenticate()
 	{
+		String username;
+		String password;
+		StdOut.println("Authentication process");
+		StdOut.println("Enter your username: ");
+		username = StdIn.readString();
+		StdOut.println("Enter your password: ");
+		password = StdIn.readString();
 
+		if (recommenderAPI.authenticate(username, password))
+		{
+			StdOut.println("Logged in successfully!");
+			authenticated = true;
+		}
+		else
+		{
+			StdOut.println("Log in failed");
+		}
 	}
 
 	public void addRating()
