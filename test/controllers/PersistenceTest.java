@@ -90,7 +90,7 @@ public class PersistenceTest
     {
       assertTrue (recommender2.getUsers().containsValue(user));
     }
-    deleteFile ("testdatastore.xml");
+//    deleteFile ("testdatastore.xml");
   }
 
 

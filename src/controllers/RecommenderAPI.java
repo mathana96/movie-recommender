@@ -25,7 +25,7 @@ public class RecommenderAPI
 	Map<String, User> usersLogin = new HashMap<>();
 	Map<Long, Movie> movies = new HashMap<>();
 	List<Rating> ratings = new ArrayList<>();
-	Parser parser;
+	Parser parser = new Parser();
 	RatingByRatingComparator ratingComparator;
 	MovieAverageRatingComparator movieAvgComparator;
 

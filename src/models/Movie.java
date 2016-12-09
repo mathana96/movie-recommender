@@ -50,8 +50,8 @@ public class Movie
 	{
 		return toStringHelper(this).addValue(movieId)
 				.addValue(title)
-//				.addValue(year)
-//				.addValue(url)
+				.addValue(year)
+				.addValue(url)
 				.toString();
 	}
 
@@ -70,6 +70,7 @@ public class Movie
 			return Objects.equal(movieId, other.movieId) 
 					&& Objects.equal(title,  other.title)
 					&& Objects.equal(year,  other.year)
+					&& Objects.equal(userRatings,  other.userRatings)
 					&& Objects.equal(url,  other.url);
 		}
 		else
