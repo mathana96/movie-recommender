@@ -17,6 +17,7 @@ import utils.XMLSerializer;
 public class Main
 {
 	RecommenderAPI recommenderAPI;
+	User loggedInUser;
 	boolean authenticated = false;
 	//	Scanner input = new Scanner(System.in);
 
@@ -45,7 +46,7 @@ public class Main
 	public static void main(String[] args) throws Exception
 	{
 		Main main = new Main();
-		main.run();
+		main.loginRun();
 	}
 
 	public int loginMenu()
@@ -78,12 +79,47 @@ public class Main
 			}
 		}
 		return option;
-
-
 	}
 
 
-	public void run() throws Exception
+	public int mainMenu()
+	{
+		boolean errorFree = false;
+		int option = 0;
+		while (!errorFree) 
+		{
+			option = 0;
+
+			try
+			{
+				StdOut.println("\n======Main Menu======\n");
+
+				StdOut.println("Welcome " + loggedInUser.firstName + "!");
+				StdOut.println("You have currently rated " + loggedInUser.ratedMovies.size() + " movies\n");
+				StdOut.println("1) Add a new movie");
+				StdOut.println("2) Rate a movie");
+				StdOut.println("3) List of movies");
+				StdOut.println("4) Top 10 movies of all time");
+				StdOut.println("5) Get personalised movie suggestions");
+				StdOut.println("\n99) Delete account");
+
+				StdOut.println("\n0) Log out");
+
+
+				option = StdIn.readInt();
+				errorFree = true;
+			}
+			catch (Exception e)
+			{
+				StdIn.readLine();
+				StdOut.println("Your selection is incorrect or not available, please try again");	
+			}
+		}
+		return option;
+
+	}
+
+	public void loginRun() throws Exception
 	{
 		StdOut.println("\nWelcome to Movie-MattCher - a movie recommender just for you!"
 				+ "\nPress enter to continue");
@@ -97,7 +133,6 @@ public class Main
 			{
 			case 1:
 				authenticate();
-				
 				break;
 
 			case 2:
@@ -114,13 +149,61 @@ public class Main
 			}
 			else
 			{
+				loginOption = 0;
+				menuRun();
 				break;
 			}
 		}
-		StdOut.println("Made it here. Get currentUser and store globally");
-		
+		StdOut.println("Made it here. Get currentUser and store globally");		
 	}
 
+	public void menuRun() throws Exception
+	{
+		int mainMenuOption = mainMenu();
+
+		while (mainMenuOption != 0)
+		{
+			switch(mainMenuOption)
+			{
+			case 1:
+				authenticate();
+				break;
+
+			case 2:
+				addUser();
+				addRating();
+				break;
+
+			case 3:
+				authenticate();
+				break;
+
+			case 4:
+				addUser();
+				addRating();
+				break;
+
+			case 5:
+				authenticate();
+				break;
+
+			case 99:
+				removeUser();
+				break;
+			default:
+				StdOut.println("Your selection is incorrect or not available, please try again");
+			}
+			if (loggedInUser != null)
+			{
+				mainMenuOption = mainMenu();
+			}
+			else
+			{
+				mainMenuOption = 0;
+				break;
+			}
+		}
+	}
 	public void addUser() throws Exception
 	{
 
@@ -202,6 +285,7 @@ public class Main
 		if (recommenderAPI.authenticate(username, password))
 		{
 			StdOut.println("Logged in successfully!");
+			loggedInUser = recommenderAPI.getUserByUsername(username);
 			authenticated = true;
 		}
 		else
@@ -213,6 +297,18 @@ public class Main
 	public void addRating()
 	{
 
+	}
+
+	public void removeUser()
+	{
+		StdOut.println("Are you sure you want to delete your account? (y/n)");
+		String toDelete = StdIn.readString();
+		if (toDelete.equalsIgnoreCase("y"))
+		{
+			recommenderAPI.removeUser(loggedInUser.userId);
+			loggedInUser = null;
+			StdOut.println("Account deleted");
+		}
 	}
 	//	@Command(description="Delete a User")
 	//	public void deleteUser (@Param(name="email") String email)
