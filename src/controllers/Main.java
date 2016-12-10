@@ -3,6 +3,7 @@ package controllers;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -181,8 +182,7 @@ public class Main
 				break;
 
 			case 4:
-				addUser();
-				addRating();
+				getTop10();
 				break;
 
 			case 5:
@@ -206,6 +206,12 @@ public class Main
 			}
 		}
 	}
+	
+	public void getTop10()
+	{
+		System.out.println(recommenderAPI.getTopTenMovies());
+	}
+	
 	public void addUser() throws Exception
 	{
 
