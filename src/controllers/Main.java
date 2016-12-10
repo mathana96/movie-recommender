@@ -102,7 +102,7 @@ public class Main
 				StdOut.println("Welcome " + loggedInUser.firstName + "!");
 				StdOut.println("You have currently rated " + loggedInUser.ratedMovies.size() + " movies\n");
 				StdOut.println("1) Add a new movie");
-				StdOut.println("2) Rate a movie");
+				StdOut.println("2) Rate movies");
 				StdOut.println("3) List of movies");
 				StdOut.println("4) Top 10 movies of all time");
 				StdOut.println("5) Get personalised movie suggestions");
@@ -188,7 +188,7 @@ public class Main
 				break;
 
 			case 5:
-				authenticate();
+				personalRec();
 				break;
 
 			case 99:
@@ -207,6 +207,19 @@ public class Main
 				break;
 			}
 		}
+	}
+	
+	public void personalRec()
+	{
+		if (recommenderAPI.getUserRecommendations(loggedInUser.userId).size() > 0)
+		{
+			StdOut.println(recommenderAPI.getUserRecommendations(loggedInUser.userId));
+		}
+		else
+		{
+			StdOut.println("No recommendations for you at the moment. We suggest you to rate more movies");
+		}
+		
 	}
 	
 	public void getTop10()

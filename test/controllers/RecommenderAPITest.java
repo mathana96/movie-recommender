@@ -155,11 +155,13 @@ public class RecommenderAPITest
 	@Test
 	public void testGetUserRecommendations()
 	{
-		User user = recommender.getUserById(usersFixtures[4].userId);
+		User user = recommender.getUserById(usersFixtures[2].userId);
 		List<Movie> recommendedMovies = recommender.getUserRecommendations(user.userId);
+		System.out.println(recommendedMovies);
 		assertNotEquals(user.ratedMovies.size(), recommendedMovies.size());
 		assertTrue(!recommendedMovies.contains(user.ratedMovies.get(1)));
 		assertTrue(!recommendedMovies.contains(user.ratedMovies.get(4)));
+		
 	}
 	
 	@Test
