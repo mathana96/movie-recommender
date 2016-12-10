@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
 import com.google.common.base.Optional;
@@ -24,7 +25,7 @@ public class Main
 	RecommenderAPI recommenderAPI;
 	User loggedInUser;
 	boolean authenticated = false;
-		Scanner input = new Scanner(System.in);
+	Scanner input = new Scanner(System.in);
 
 
 	public Main() throws Exception
@@ -142,7 +143,6 @@ public class Main
 
 			case 2:
 				addUser();
-				addRating();
 				break;
 
 			default:
@@ -176,7 +176,6 @@ public class Main
 
 			case 2:
 				addUser();
-				addRating();
 				break;
 
 			case 3:
@@ -208,7 +207,7 @@ public class Main
 			}
 		}
 	}
-	
+
 	public void personalRec()
 	{
 		if (recommenderAPI.getUserRecommendations(loggedInUser.userId).size() > 0)
@@ -219,14 +218,14 @@ public class Main
 		{
 			StdOut.println("No recommendations for you at the moment. We suggest you to rate more movies");
 		}
-		
+
 	}
-	
+
 	public void getTop10()
 	{
 		System.out.println(recommenderAPI.getTopTenMovies());
 	}
-	
+
 	public void addUser() throws Exception
 	{
 
@@ -290,9 +289,10 @@ public class Main
 		StdOut.println("Enter a password: ");
 		String password = StdIn.readString();
 
-		recommenderAPI.addUser(firstName, lastName, age, gender, occupation, username, password);
+		User addedUser = recommenderAPI.addUser(firstName, lastName, age, gender, occupation, username, password);
 		//		recommenderAPI.store();
 		StdOut.println("Your details have been logged!");
+		addLoginRating(addedUser);
 	}
 
 	public void authenticate()
@@ -317,9 +317,49 @@ public class Main
 		}
 	}
 
-	public void addRating()
+	public void addLoginRating(User addedUser)
 	{
+		int max = recommenderAPI.movies.size();
+		int rating = 0;
+		StdOut.println("\nYou are required to rate 20 movies before using this service. Enter 100 to exit when prompted for rating\n");
+		while (addedUser.ratedMovies.size() < 20 && rating != 100)
+		{
+			Random random = new Random();
+			long randomId = random.nextInt(max - 0);
 
+			if (!addedUser.ratedMovies.containsKey(randomId))
+			{
+				boolean number = false;
+				while (!number) 
+				{
+					try 
+					{
+						StdOut.println(recommenderAPI.getMovieById(randomId));
+						StdOut.println("Rate this movie:  (-5 to 5 in increments of 1) Enter 100 to exit");
+						rating = StdIn.readInt();
+						if(rating >= -5 && rating <= 5)
+						{
+							number = true;
+						}
+						else if (rating == 100)
+						{
+							number = true;
+							break;
+						}
+					}
+					catch (Exception e) 
+					{
+						StdIn.readString();
+						StdOut.println("Numerical values only");					
+					}
+				}		
+				if (rating != 100)
+				{
+					recommenderAPI.addRating(addedUser.userId, randomId, rating);
+				}
+			}
+
+		}
 	}
 
 	public void removeUser()
@@ -337,11 +377,11 @@ public class Main
 			}
 		}
 	}
-	
+
 	public void addMovie() throws Exception
 	{
 		StdOut.println("Adding a movie");
-		
+
 		boolean unique = false;
 		String title = "";
 		String theTitle = "";
@@ -350,7 +390,7 @@ public class Main
 		{
 			StdOut.println("Enter movie title: ");
 			title = input.nextLine();
-			
+
 			boolean number = false;
 			while (!number) 
 			{
@@ -376,7 +416,7 @@ public class Main
 			}
 			//			System.out.println(title);
 			theTitle = title.concat(" " + "(" + Integer.toString(year) + ")"); //Making user inputs match the standard format of raw data
-//			System.out.println(theTitle);
+			//			System.out.println(theTitle);
 			if (uniqueMovieCheck(theTitle, year) == true)
 			{
 				unique = true;
@@ -386,14 +426,14 @@ public class Main
 				StdOut.println("The movie " + theTitle + " is already in our database");
 			}
 		}
-		
+
 		StdOut.println("Enter IMDb url of the movie if available");
 		String url = StdIn.readString();
 		if (url.isEmpty())
 		{
 			url = "No URL";
 		}
-		
+
 		int rating = 0;
 		boolean number = false;
 		while (!number) 
@@ -419,11 +459,11 @@ public class Main
 		}
 		Movie movie = recommenderAPI.addMovie(theTitle, year, url);
 		recommenderAPI.addRating(loggedInUser.userId, movie.movieId, rating);
-		
+
 		StdOut.println("Movie added successfully!");
-//		recommenderAPI.store();
+		//		recommenderAPI.store();
 	}
-	
+
 	public boolean uniqueMovieCheck(String title, int year)
 	{		
 		for (Movie movie: recommenderAPI.movies.values())

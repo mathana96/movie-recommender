@@ -164,11 +164,13 @@ public class RecommenderAPI
 			User mostSimilarUser = getUserById(mostSimilar);
 			List<Movie> recommendedMoviesList = new ArrayList<>();
 			
-			for (Rating rating: mostSimilarUser.ratedMovies.values())
-			{
-				if (rating.rating >=3 && !currentUser.ratedMovies.containsKey(rating.movieId))
+			if (mostSimilarUser.ratedMovies.size() > 0) {
+				for (Rating rating: mostSimilarUser.ratedMovies.values())
 				{
-					recommendedMoviesList.add(getMovieById(rating.movieId));
+					if (rating.rating >=3 && !currentUser.ratedMovies.containsKey(rating.movieId))
+					{
+						recommendedMoviesList.add(getMovieById(rating.movieId));
+					}
 				}
 			}
 			return recommendedMoviesList;

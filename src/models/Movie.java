@@ -48,9 +48,10 @@ public class Movie
 	
 	public String toString()
 	{
-		return toStringHelper(this).addValue("\nMovie Id: " + movieId)
+		return toStringHelper(this).addValue("\n\nMovie Id: " + movieId)
 				.addValue("\nTitle: " + title)
 				.addValue("\nRelease year: " + year)
+				.addValue("\nAverage rating: " + getAverageRating())
 				.addValue("\nIMDb URL: " + url + "\n\n")
 				.toString();
 	}
