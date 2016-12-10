@@ -81,7 +81,6 @@ public class Parser
 
 				Movie movie = new Movie(movieId, title, year, url);
 				movies.put(movieId, movie);
-
 			}
 			else
 			{
@@ -152,12 +151,12 @@ public class Parser
 		return ratingsFiltered;
 	}
 	
-  public void store(Serializer serializer) throws Exception
-  {
-    serializer.push(users);
-    serializer.push(movies);
-    serializer.write(); 
-  }
+//  public void store(Serializer serializer) throws Exception
+//  {
+//    serializer.push(users);
+//    serializer.push(movies);
+//    serializer.write(); 
+//  }
   
 //	public Map<Long, User> getUsers()
 //	{
@@ -178,5 +177,7 @@ public class Parser
 	{
 		return movies.get(i);
 	}
+	
+
 
 }

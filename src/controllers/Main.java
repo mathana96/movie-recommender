@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ import com.google.common.base.Optional;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdIn;
 import edu.princeton.cs.introcs.StdOut;
+import models.Movie;
 import models.User;
 import utils.Serializer;
 import utils.XMLSerializer;
@@ -19,7 +21,7 @@ public class Main
 	RecommenderAPI recommenderAPI;
 	User loggedInUser;
 	boolean authenticated = false;
-	//	Scanner input = new Scanner(System.in);
+		Scanner input = new Scanner(System.in);
 
 
 	public Main() throws Exception
@@ -38,7 +40,7 @@ public class Main
 			StdOut.println("File not present");
 			Serializer newSerializer = new XMLSerializer(new File("datastore.xml"));
 			recommenderAPI = new RecommenderAPI(newSerializer); 
-			recommenderAPI.loadRawData();
+			recommenderAPI.loadRawData(); //Load and store raw data into datastore.xml
 			recommenderAPI.load();
 		}
 	}
@@ -166,7 +168,7 @@ public class Main
 			switch(mainMenuOption)
 			{
 			case 1:
-				authenticate();
+				addMovie();
 				break;
 
 			case 2:
@@ -305,20 +307,68 @@ public class Main
 		String toDelete = StdIn.readString();
 		if (toDelete.equalsIgnoreCase("y"))
 		{
-			recommenderAPI.removeUser(loggedInUser.userId);
-			loggedInUser = null;
-			StdOut.println("Account deleted");
+			Optional<User> user = Optional.fromNullable(recommenderAPI.getUserById(loggedInUser.userId));
+			if (user.isPresent()) 
+			{
+				recommenderAPI.removeUser(loggedInUser.userId);
+				loggedInUser = null;
+				StdOut.println("Account deleted");
+			}
 		}
 	}
-	//	@Command(description="Delete a User")
-	//	public void deleteUser (@Param(name="email") String email)
-	//	{
-	//		Optional<User> user = Optional.fromNullable(paceApi.getUserByEmail(email));
-	//		if (user.isPresent())
-	//		{
-	//			paceApi.deleteUser(user.get().id);
-	//		}
-	//	}
-
+	
+	public void addMovie() throws Exception
+	{
+		StdOut.println("Adding a movie");
+		
+		boolean unique = false;
+		String title = "";
+		String theTitle = "";
+		int year = 0;
+		while (!unique) 
+		{
+			StdOut.println("Enter movie title: ");
+			title = input.nextLine();
+			
+			StdIn.readLine();
+			StdOut.println("Enter the year the movie was released: (eg. 2016)");
+			year = StdIn.readInt();
+			
+//			System.out.println(title);
+			theTitle = title.concat(" " + "(" + Integer.toString(year) + ")"); //Making user inputs match the standard format of raw data
+//			System.out.println(theTitle);
+			if (uniqueMovieCheck(theTitle, year) == true)
+			{
+				unique = true;
+			}
+			else
+			{
+				StdOut.println("The movie " + theTitle + " is already in our database");
+			}
+		}
+		
+		StdOut.println("Enter IMDb url of the movie if available");
+		String url = StdIn.readString();
+		if (url.isEmpty())
+		{
+			url = "No URL";
+		}
+		
+		recommenderAPI.addMovie(theTitle, year, url);
+		StdOut.println("Movie added successfully!");
+//		recommenderAPI.store();
+	}
+	
+	public boolean uniqueMovieCheck(String title, int year)
+	{		
+		for (Movie movie: recommenderAPI.movies.values())
+		{			
+			if (title.toLowerCase().equals(movie.title.toLowerCase()) && (movie.year == year))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
 }
