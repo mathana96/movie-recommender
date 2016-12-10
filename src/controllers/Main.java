@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.File;
+import java.time.Year;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +14,7 @@ import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdIn;
 import edu.princeton.cs.introcs.StdOut;
 import models.Movie;
+import models.Rating;
 import models.User;
 import utils.Serializer;
 import utils.XMLSerializer;
@@ -336,11 +338,30 @@ public class Main
 			StdOut.println("Enter movie title: ");
 			title = input.nextLine();
 			
-			StdIn.readLine();
-			StdOut.println("Enter the year the movie was released: (eg. 2016)");
-			year = StdIn.readInt();
-			
-//			System.out.println(title);
+			boolean number = false;
+			while (!number) 
+			{
+				try 
+				{
+					StdIn.readLine();
+					StdOut.println("Enter the year the movie was released: (eg. 2016)");
+					year = StdIn.readInt();
+					if (year >= 1500 && year <= Year.now().getValue())
+					{
+						number = true;
+					}
+					else
+					{
+						StdOut.println("Movies from the 1500s onwards until the present year only. Time travel not allowed!");
+					}
+				} 
+				catch (Exception e) 
+				{
+					StdIn.readString();
+					StdOut.println("Numerical inputs only");
+				}
+			}
+			//			System.out.println(title);
 			theTitle = title.concat(" " + "(" + Integer.toString(year) + ")"); //Making user inputs match the standard format of raw data
 //			System.out.println(theTitle);
 			if (uniqueMovieCheck(theTitle, year) == true)
@@ -360,7 +381,32 @@ public class Main
 			url = "No URL";
 		}
 		
-		recommenderAPI.addMovie(theTitle, year, url);
+		int rating = 0;
+		boolean number = false;
+		while (!number) 
+		{
+			try 
+			{
+				StdOut.println("Enter rating for this movie: (-5 to 5 at increments of 1)");
+				rating = StdIn.readInt();
+				if (rating >=-5 && rating <= 5)
+				{
+					number = true;
+				}
+				else
+				{
+					StdOut.println("Numerical values between -5 to 5 only");
+				}
+			} 
+			catch (Exception e) 
+			{
+				StdIn.readString();
+				StdOut.println("Numerical values between -5 to 5 only");
+			}
+		}
+		Movie movie = recommenderAPI.addMovie(theTitle, year, url);
+		recommenderAPI.addRating(loggedInUser.userId, movie.movieId, rating);
+		
 		StdOut.println("Movie added successfully!");
 //		recommenderAPI.store();
 	}
