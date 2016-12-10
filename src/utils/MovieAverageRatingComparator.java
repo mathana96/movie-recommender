@@ -17,5 +17,9 @@ public class MovieAverageRatingComparator implements Comparator<Movie>
 			 return -1;
 		 else return  0;
 	}
+	
+	
 
 }
+
+

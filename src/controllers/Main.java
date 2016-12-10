@@ -2,16 +2,12 @@ package controllers;
 
 import java.io.File;
 import java.time.Year;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+
 import java.util.Random;
 import java.util.Scanner;
 
 import com.google.common.base.Optional;
 
-import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdIn;
 import edu.princeton.cs.introcs.StdOut;
 import models.Movie;
@@ -104,7 +100,7 @@ public class Main
 				StdOut.println("You have currently rated " + loggedInUser.ratedMovies.size() + " movies\n");
 				StdOut.println("1) Add a new movie");
 				StdOut.println("2) Rate movies");
-				StdOut.println("3) List of movies");
+				StdOut.println("3) Search movies");
 				StdOut.println("4) Top 10 movies of all time");
 				StdOut.println("5) Get personalised movie suggestions");
 				StdOut.println("\n99) Delete account");
@@ -175,11 +171,11 @@ public class Main
 				break;
 
 			case 2:
-				addUser();
+				addRatings();
 				break;
 
 			case 3:
-				authenticate();
+				searchMovies();
 				break;
 
 			case 4:
@@ -208,6 +204,12 @@ public class Main
 		}
 	}
 
+	public void searchMovies()
+	{
+		StdOut.println("Enter your search: ");
+		String prefix = StdIn.readString();
+		System.out.println(recommenderAPI.searchMovies(prefix));
+	}
 	public void personalRec()
 	{
 		if (recommenderAPI.getUserRecommendations(loggedInUser.userId).size() > 0)
@@ -362,6 +364,51 @@ public class Main
 		}
 	}
 
+	public void addRatings()
+	{
+		int max = recommenderAPI.movies.size();
+		int rating = 0;
+		StdOut.println("\nMovie Rating Process. You are shown random movies you haven't rated before. Enter 100 to exit when prompted for rating\n");
+		while (loggedInUser.ratedMovies.size() < max && rating != 100)
+		{
+			Random random = new Random();
+			long randomId = random.nextInt(max - 0);
+
+			if (!loggedInUser.ratedMovies.containsKey(randomId))
+			{
+				boolean number = false;
+				while (!number) 
+				{
+					try 
+					{
+						StdOut.println(recommenderAPI.getMovieById(randomId));
+						StdOut.println("Rate this movie:  (-5 to 5 in increments of 1) Enter 100 to exit");
+						rating = StdIn.readInt();
+						if(rating >= -5 && rating <= 5)
+						{
+							number = true;
+						}
+						else if (rating == 100)
+						{
+							number = true;
+							break;
+						}
+					}
+					catch (Exception e) 
+					{
+						StdIn.readString();
+						StdOut.println("Numerical values only");					
+					}
+				}		
+				if (rating != 100)
+				{
+					recommenderAPI.addRating(loggedInUser.userId, randomId, rating);
+				}
+			}
+
+		}
+	}
+	
 	public void removeUser()
 	{
 		StdOut.println("Are you sure you want to delete your account? (y/n)");
@@ -396,7 +443,6 @@ public class Main
 			{
 				try 
 				{
-					StdIn.readLine();
 					StdOut.println("Enter the year the movie was released: (eg. 2016)");
 					year = StdIn.readInt();
 					if (year >= 1500 && year <= Year.now().getValue())
@@ -414,19 +460,17 @@ public class Main
 					StdOut.println("Numerical inputs only");
 				}
 			}
-			//			System.out.println(title);
-			theTitle = title.concat(" " + "(" + Integer.toString(year) + ")"); //Making user inputs match the standard format of raw data
-			//			System.out.println(theTitle);
-			if (uniqueMovieCheck(theTitle, year) == true)
+						
+			if (recommenderAPI.uniqueMovieCheck(title, year) == true)
 			{
 				unique = true;
 			}
 			else
 			{
-				StdOut.println("The movie " + theTitle + " is already in our database");
+				StdOut.println("The movie " + title + " is already in our database");
 			}
 		}
-
+		StdIn.readLine();
 		StdOut.println("Enter IMDb url of the movie if available");
 		String url = StdIn.readString();
 		if (url.isEmpty())
@@ -462,18 +506,6 @@ public class Main
 
 		StdOut.println("Movie added successfully!");
 		//		recommenderAPI.store();
-	}
-
-	public boolean uniqueMovieCheck(String title, int year)
-	{		
-		for (Movie movie: recommenderAPI.movies.values())
-		{			
-			if (title.toLowerCase().equals(movie.title.toLowerCase()) && (movie.year == year))
-			{
-				return false;
-			}
-		}
-		return true;
 	}
 
 }

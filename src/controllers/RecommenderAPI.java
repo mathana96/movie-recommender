@@ -1,21 +1,25 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Range;
 
 import models.Movie;
 import models.Rating;
 import models.User;
 import utils.MovieAverageRatingComparator;
 import utils.Parser;
-import utils.RatingByRatingComparator;
 import utils.Serializer;
 
 public class RecommenderAPI
@@ -27,7 +31,6 @@ public class RecommenderAPI
 	Map<Long, Movie> movies = new HashMap<>();
 	List<Rating> ratings = new ArrayList<>();
 	Parser parser = new Parser();
-	RatingByRatingComparator ratingComparator;
 	MovieAverageRatingComparator movieAvgComparator;
 
 	public RecommenderAPI()
@@ -163,8 +166,9 @@ public class RecommenderAPI
 			}
 			User mostSimilarUser = getUserById(mostSimilar);
 			List<Movie> recommendedMoviesList = new ArrayList<>();
-			
-			if (mostSimilarUser.ratedMovies.size() > 0) {
+
+			if (mostSimilarUser != null) 
+			{
 				for (Rating rating: mostSimilarUser.ratedMovies.values())
 				{
 					if (rating.rating >=3 && !currentUser.ratedMovies.containsKey(rating.movieId))
@@ -193,7 +197,31 @@ public class RecommenderAPI
 		}
 		return false;
 	}
+	public boolean uniqueMovieCheck(String title, int year)
+	{		
+		for (Movie movie: getMovies().values())
+		{			
+			String movieTitle = movie.title;
+			movieTitle = movieTitle.replaceAll("\\s*\\([^\\)]*\\)\\s*", "");
+			System.out.println(movieTitle);
+			if (title.toLowerCase().equals(movieTitle.toLowerCase()) && (movie.year == year))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
+	public List<Movie> searchMovies(String prefix)
+	{
+		List<Movie> searchMovies = new ArrayList<>(movies.values());
+		return filter(searchMovies, prefix);
+	}
+
+	private static List<Movie> filter(final Collection<Movie> source, final String prefix) 
+	{
+		return source.stream().filter(item -> item.title.toLowerCase().startsWith(prefix.toLowerCase())).collect(Collectors.toList());
+	}
 	public List<Rating> getRatings()
 	{
 		return ratings;
