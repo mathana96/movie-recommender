@@ -19,7 +19,7 @@ public class Parser
 	List<Rating> ratings = new ArrayList<>();
 	Map<String, Rating> ratingsMap = new HashMap<>();
 
-	
+
 	RatingByTimeComparator comparator = new RatingByTimeComparator();
 
 
@@ -58,6 +58,7 @@ public class Parser
 				throw new Exception("Invalid member length: "+ userTokens.length);
 			}
 		}
+		inUsers.close();
 		return users;
 	}
 
@@ -76,7 +77,16 @@ public class Parser
 			{
 				long movieId = Long.parseLong(movieTokens[0]);
 				String title = movieTokens[1];
-				int year = Integer.parseInt(movieTokens[2].substring(movieTokens[2].length()-4, movieTokens[2].length()));
+				String theYear = movieTokens[2];
+				int year = 0;
+				if (theYear != null && theYear.length() > 0)
+				{
+					year = Integer.parseInt(theYear.substring(7));
+				}
+				else
+				{
+					year = 1996;
+				}
 				String url = movieTokens[3];
 
 				Movie movie = new Movie(movieId, title, year, url);
@@ -87,6 +97,7 @@ public class Parser
 				throw new Exception("Invalid member length: "+ movieTokens.length);
 			}
 		}
+		inMovies.close();
 		return movies;
 	}
 
@@ -108,76 +119,77 @@ public class Parser
 				Integer rating = Integer.parseInt(ratingTokens[2]);
 				long timestamp = Long.parseLong(ratingTokens[3]);
 				Rating r = new Rating(userId, movieId, rating, timestamp);
-				
+
 				ratings.add(r);
-			
+
 			}
 			else
 			{
 				throw new Exception("Invalid member length: "+ ratingTokens.length);
 			}
 		}
+		inRatings.close();
 		//Sort Rating objects based on the timestamp to get most recent rating on duplicates	
 		Collections.sort(ratings, comparator);
 
 		//Using a Map to filter out duplicates
 		for (Rating r: ratings)
 		{
-			
+
 			ratingsMap.put(r.userId + "u" + r.movieId + "m", r);
 		}
-		
+
 		//Placing duplicates into an ArrayList to sort as Map does not guarantee order
 		List<Rating> ratingsFiltered = new ArrayList<>(ratingsMap.values());
 		Collections.sort(ratingsFiltered, comparator);
-		
-//		System.out.println(ratingsFiltered.size());
-//		System.out.println(ratingsFiltered);
-		
-		
+
+		//		System.out.println(ratingsFiltered.size());
+		//		System.out.println(ratingsFiltered);
+
+		System.out.println(users.size());
+
 		//Adds respective ratings to users and movies
 		for (Rating rating: ratingsFiltered)
 		{
 			User user = getUser(rating.userId);
 			Movie movie = getMovie(rating.movieId);
 			Rating r = new Rating(user.userId, movie.movieId, rating.rating);
-			
+
 			user.addRatedMovies(movie.movieId, r);
 			movie.addUserRatings(user.userId, r);
-//			movie.addAverageRating(rating.rating);
-//			System.out.println(movie.title + " " + movie.userRatings);
+			//			movie.addAverageRating(rating.rating);
+			//			System.out.println(movie.title + " " + movie.userRatings);
 		}
-	
 		return ratingsFiltered;
 	}
-	
-//  public void store(Serializer serializer) throws Exception
-//  {
-//    serializer.push(users);
-//    serializer.push(movies);
-//    serializer.write(); 
-//  }
-  
-//	public Map<Long, User> getUsers()
-//	{
-//		return users;
-//	}
-//
+
+	//  public void store(Serializer serializer) throws Exception
+	//  {
+	//    serializer.push(users);
+	//    serializer.push(movies);
+	//    serializer.write(); 
+	//  }
+
+	//	public Map<Long, User> getUsers()
+	//	{
+	//		return users;
+	//	}
+	//
 	public User getUser(long l)
 	{
 		return users.get(l);
 	}
 
-//	public Map<Long, Movie> getMovies()
-//	{
-//		return movies;
-//	}
-//
+	//	public Map<Long, Movie> getMovies()
+	//	{
+	//		return movies;
+	//	}
+	//
 	public Movie getMovie(long i)
 	{
 		return movies.get(i);
 	}
-	
+
 
 
 }

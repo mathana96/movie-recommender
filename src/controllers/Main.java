@@ -99,10 +99,11 @@ public class Main
 				StdOut.println("Welcome " + loggedInUser.firstName + "!");
 				StdOut.println("You have currently rated " + loggedInUser.ratedMovies.size() + " movies\n");
 				StdOut.println("1) Add a new movie");
-				StdOut.println("2) Rate movies");
-				StdOut.println("3) Search movies");
-				StdOut.println("4) Top 10 movies of all time");
-				StdOut.println("5) Get personalised movie suggestions");
+				StdOut.println("2) Rate a movie");
+				StdOut.println("3) Rate random movies");
+				StdOut.println("4) Search movies");
+				StdOut.println("5) Top 10 movies of all time");
+				StdOut.println("6) Get personalised movie suggestions");
 				StdOut.println("\n99) Delete account");
 
 				StdOut.println("\n0) Log out");
@@ -155,7 +156,7 @@ public class Main
 				break;
 			}
 		}
-		StdOut.println("Made it here. Get currentUser and store globally");		
+		StdOut.println("Made it here. Thanks for stopping by");		
 	}
 
 	public void menuRun() throws Exception
@@ -171,18 +172,22 @@ public class Main
 				break;
 
 			case 2:
-				addRatings();
+				addARating();
 				break;
 
 			case 3:
-				searchMovies();
+				addRandomRatings();
 				break;
 
 			case 4:
-				getTop10();
+				searchMovies();
 				break;
 
 			case 5:
+				getTop10();
+				break;
+
+			case 6:
 				personalRec();
 				break;
 
@@ -212,7 +217,7 @@ public class Main
 	}
 	public void personalRec()
 	{
-		if (recommenderAPI.getUserRecommendations(loggedInUser.userId).size() > 0)
+		if (loggedInUser.ratedMovies.size() > 0)
 		{
 			StdOut.println(recommenderAPI.getUserRecommendations(loggedInUser.userId));
 		}
@@ -292,7 +297,7 @@ public class Main
 		String password = StdIn.readString();
 
 		User addedUser = recommenderAPI.addUser(firstName, lastName, age, gender, occupation, username, password);
-		//		recommenderAPI.store();
+		recommenderAPI.store();
 		StdOut.println("Your details have been logged!");
 		addLoginRating(addedUser);
 	}
@@ -319,12 +324,69 @@ public class Main
 		}
 	}
 
-	public void addLoginRating(User addedUser)
+	public void addARating()
+	{
+		long mvId = 0L;
+		int rating = 0;
+		boolean number = false;
+		while (!number) 
+		{
+			try 
+			{
+				StdOut.println("Enter movie Id of movie you want to add rating: ");
+				mvId = StdIn.readInt();
+//				StdIn.readString();
+
+				if(recommenderAPI.movies.containsKey(mvId))
+				{
+					StdOut.println(recommenderAPI.getMovieById(mvId));
+					number = true;
+				}
+				else 
+				{
+					StdOut.println("Movie id does not exist");
+				}
+			}
+			catch (Exception e) 
+			{
+				StdIn.readString();
+				StdOut.println("Numerical values only");					
+			}
+		}
+		
+		boolean number2 = false;
+		while (!number2) 
+		{
+			try 
+			{
+				StdOut.println("Rate this movie:  (-5 to 5 in increments of 1)");
+				rating = StdIn.readInt();
+				if(rating >= -5 && rating <= 5)
+				{
+					number2 = true;
+				}
+				else 
+				{
+					StdOut.println("Numerical values only");
+				}
+			}
+			catch (Exception e) 
+			{
+				StdIn.readString();
+				StdOut.println("Numerical values only");					
+			}
+		}
+		StdOut.println("Successfully rated!");
+		recommenderAPI.addRating(loggedInUser.userId, mvId, rating);
+	}
+	
+	
+	public void addLoginRating(User addedUser) throws Exception
 	{
 		int max = recommenderAPI.movies.size();
 		int rating = 0;
-		StdOut.println("\nYou are required to rate 20 movies before using this service. Enter 100 to exit when prompted for rating\n");
-		while (addedUser.ratedMovies.size() < 20 && rating != 100)
+		StdOut.println("\nYou are required to rate at least 10 movies before using this service. Enter 100 to exit when prompted for rating\n");
+		while (addedUser.ratedMovies.size() < 10 && rating != 100)
 		{
 			Random random = new Random();
 			long randomId = random.nextInt(max - 0);
@@ -362,9 +424,10 @@ public class Main
 			}
 
 		}
+		recommenderAPI.store();
 	}
 
-	public void addRatings()
+	public void addRandomRatings() throws Exception
 	{
 		int max = recommenderAPI.movies.size();
 		int rating = 0;
@@ -407,9 +470,10 @@ public class Main
 			}
 
 		}
+		recommenderAPI.store();
 	}
-	
-	public void removeUser()
+
+	public void removeUser() throws Exception
 	{
 		StdOut.println("Are you sure you want to delete your account? (y/n)");
 		String toDelete = StdIn.readString();
@@ -423,6 +487,7 @@ public class Main
 				StdOut.println("Account deleted");
 			}
 		}
+		recommenderAPI.store();
 	}
 
 	public void addMovie() throws Exception
@@ -460,7 +525,7 @@ public class Main
 					StdOut.println("Numerical inputs only");
 				}
 			}
-						
+
 			if (recommenderAPI.uniqueMovieCheck(title, year) == true)
 			{
 				unique = true;
@@ -505,7 +570,7 @@ public class Main
 		recommenderAPI.addRating(loggedInUser.userId, movie.movieId, rating);
 
 		StdOut.println("Movie added successfully!");
-		//		recommenderAPI.store();
+		recommenderAPI.store();
 	}
 
 }

@@ -46,9 +46,9 @@ public class RecommenderAPI
 
 	public void loadRawData() throws Exception
 	{
-		String userDataPath = ("././data/moviedata_small/users5.dat");
-		String movieDataPath = ("././data/moviedata_small/items5.dat");
-		String ratingDataPath = ("././data/moviedata_small/ratings5.dat");
+		String userDataPath = ("././data/data_movieLens/users.dat");
+		String movieDataPath = ("././data/data_movieLens/items.dat");
+		String ratingDataPath = ("././data/data_movieLens/ratings.dat");
 
 		users = parser.parseUserData(userDataPath);
 		movies = parser.parseMovieData(movieDataPath);
@@ -128,43 +128,57 @@ public class RecommenderAPI
 	}
 	public List<Movie> getUserRecommendations(long userId)
 	{
-		User currentUser = getUserById(userId);
+		
 
+		User currentUser = getUserById(userId);
 		if (currentUser.ratedMovies.size() > 0) 
 		{
-			Set<Long> targetUsers = users.keySet();
-			targetUsers.remove(currentUser.userId);
+			Set<Long> targetUsers = new HashSet<>();
+			
 			List<Rating> currentUserRatings = new ArrayList<>(currentUser.ratedMovies.values());
 
 			for (Rating currentUserRating: currentUserRatings)
 			{
 				Movie movie = getMovieById(currentUserRating.movieId);
-				Set<Long> currentTarget = movie.userRatings.keySet();
-				targetUsers.retainAll(currentTarget);
+//				Set<Long> currentTarget = movie.userRatings.keySet();
+				if (movie.userRatings.size() > 1)
+				{
+					targetUsers.addAll(movie.userRatings.keySet());
+				}
+
 			}
 			Long mostSimilar = 0L;
-
-			for (Rating currentUserRating: currentUserRatings)
+			targetUsers.remove(currentUser.userId);
+			System.out.println(targetUsers);
+			if (targetUsers != null && targetUsers.size() > 0) 
 			{
-				int currentRating = currentUserRating.rating;
-
-				Movie movie = getMovieById(currentUserRating.movieId);
-
-				for (Long targetId: targetUsers)
+				for (Rating currentUserRating: currentUserRatings)
 				{
-					int similarity = 0;
-					User targetUser = getUserById(targetId);
-					int targetRating = targetUser.ratedMovies.get(movie.movieId).rating;
-					similarity += (currentRating * targetRating);
-
-					if (similarity > mostSimilar)
+					int currentRating = currentUserRating.rating;
+					
+					Movie movie = getMovieById(currentUserRating.movieId);
+					
+					for (Long targetId: targetUsers)
 					{
-						mostSimilar = targetId;
+						int similarity = 0;
+						User targetUser = getUserById(targetId);
+						int targetRating = -5;
+						if (targetUser.ratedMovies.containsKey(movie.movieId))
+						{
+							targetRating = targetUser.ratedMovies.get(movie.movieId).rating;
+						}
+						similarity += (currentRating * targetRating);
+						
+						if (similarity > mostSimilar)
+						{
+							mostSimilar = targetId;
+						}						
 					}
-
 				}
 			}
+			
 			User mostSimilarUser = getUserById(mostSimilar);
+			System.out.println(mostSimilarUser);
 			List<Movie> recommendedMoviesList = new ArrayList<>();
 
 			if (mostSimilarUser != null) 
@@ -203,7 +217,7 @@ public class RecommenderAPI
 		{			
 			String movieTitle = movie.title;
 			movieTitle = movieTitle.replaceAll("\\s*\\([^\\)]*\\)\\s*", "");
-			System.out.println(movieTitle);
+//			System.out.println(movieTitle);
 			if (title.toLowerCase().equals(movieTitle.toLowerCase()) && (movie.year == year))
 			{
 				return false;
