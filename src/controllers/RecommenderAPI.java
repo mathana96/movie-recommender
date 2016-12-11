@@ -84,7 +84,17 @@ public class RecommenderAPI
 		Preconditions.checkNotNull(username);
 		Preconditions.checkNotNull(password);
 		
-		long userId = users.size() + 1;
+		//Cheap fix to the counter problem
+		long highest = 0L;
+		for (Long key: users.keySet())
+		{
+			if (key > highest)
+			{
+				highest = key;
+			}
+		}
+		
+		long userId = highest + 1;
 		User user = new User(userId, firstName, lastName, age, gender, occupation, username, password);
 		users.put(user.userId, user);
 		usersLogin.put(user.username, user);

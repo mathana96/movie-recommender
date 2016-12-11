@@ -194,5 +194,10 @@ public class Parser
 	{
 		return movies.get(i);
 	}
+	
+	public int getMoviesSize()
+	{
+		return movies.size();
+	}
 
 }
