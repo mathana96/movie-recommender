@@ -1,10 +1,17 @@
+/**
+ * @author mathana
+ */
 package utils;
 
 import java.util.Comparator;
 
 import models.Movie;
 
-
+/**
+ * Comparator to sort Movie objects based on their average user ratings
+ * @author mathana
+ *
+ */
 public class MovieAverageRatingComparator implements Comparator<Movie>
 {
 

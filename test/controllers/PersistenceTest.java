@@ -1,3 +1,6 @@
+/**
+ * @author mathana
+ */
 package controllers;
 
 import static org.junit.Assert.*;
@@ -20,7 +23,7 @@ public class PersistenceTest
 {
 	RecommenderAPI recommender;
 	Fixtures f = new Fixtures();
-	
+
 	@Before
 	public void setUp() throws Exception
 	{
@@ -31,14 +34,18 @@ public class PersistenceTest
 	{
 	}
 
+	/**
+	 * Populating the data structurs in the recommenderAPI
+	 * @param recommenderAPI
+	 */
 	void populate (RecommenderAPI recommenderAPI)
-  {
-    for (User user : usersFixtures)
-    {
-      recommenderAPI.addUser(user.firstName, user.lastName, user.age, user.gender, user.occupation, user.username, user.password);
-    }
+	{
+		for (User user : usersFixtures)
+		{
+			recommenderAPI.addUser(user.firstName, user.lastName, user.age, user.gender, user.occupation, user.username, user.password);
+		}
 
-    for (Movie movie: moviesFixtures)
+		for (Movie movie: moviesFixtures)
 		{
 			recommender.addMovie(movie.title, movie.year, movie.url);
 		}
@@ -46,52 +53,61 @@ public class PersistenceTest
 		{
 			recommender.addRating(r.userId, r.movieId, r.rating);
 		}
-		
+
 		f.userRatingsFixtures();
 		f.ratedMoviesFixtures();
-  }
-	
-  void deleteFile(String fileName)
-  {
-    File datastore = new File ("testdatastore.xml");
-    if (datastore.exists())
-    {
-      datastore.delete();
-    }
-  }
+	}
+
+	void deleteFile(String fileName)
+	{
+		File datastore = new File ("testdatastore.xml");
+		if (datastore.exists())
+		{
+			datastore.delete();
+		}
+	}
+
+	/**
+	 * Test if the API was populated correctly
+	 */
 	@Test
 	public void testPopulate()
 	{
 		recommender = new RecommenderAPI();
 		assertEquals(0, recommender.getUsers().size());
 		populate(recommender);
-		
+
 		assertEquals(usersFixtures.length, recommender.getUsers().size());
 		assertEquals(usersFixtures[0].ratedMovies.size(), recommender.getUserById(usersFixtures[0].userId).ratedMovies.size());
 	}
-	
+
+	/**
+	 * Test if the serializer is working and data is being persisted
+	 * @throws Exception
+	 */
 	@Test
-  public void testXMLSerializer() throws Exception
-  { 
-    String datastoreFile = "testdatastore.xml";
-    deleteFile(datastoreFile);
+	public void testXMLSerializer() throws Exception
+	{ 
+		String datastoreFile = "testdatastore.xml";
+		deleteFile(datastoreFile);
 
-    Serializer serializer = new XMLSerializer(new File (datastoreFile));
+		Serializer serializer = new XMLSerializer(new File (datastoreFile));
 
-    recommender = new RecommenderAPI(serializer); 
-    populate(recommender);
-    recommender.store();
+		recommender = new RecommenderAPI(serializer); 
+		populate(recommender);
+		recommender.store();
 
-    RecommenderAPI recommender2 =  new RecommenderAPI(serializer);
-    recommender2.load();
+		RecommenderAPI recommender2 =  new RecommenderAPI(serializer);
+		recommender2.load();
 
-    assertEquals (recommender.getUsers().size(), recommender2.getUsers().size());
-    for (User user : recommender.getUsers().values())
-    {
-      assertTrue (recommender2.getUsers().containsValue(user));
-    }
-//    deleteFile ("testdatastore.xml");
-  }
+		assertEquals (recommender.getUsers().size(), recommender2.getUsers().size());
+		for (User user : recommender.getUsers().values())
+		{
+			assertTrue (recommender2.getUsers().containsValue(user));
+		}
+		deleteFile ("testdatastore.xml");
+	}
+
 
 
 }

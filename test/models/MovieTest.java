@@ -1,3 +1,6 @@
+/**
+ * @author mathana
+ */
 package models;
 
 import static org.junit.Assert.*;
@@ -6,6 +9,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test to verify that a Movie object can be created correctly and 
+ * that the methods within it function as per intended
+ */
 public class MovieTest
 {
 	Movie movie;
@@ -21,6 +28,9 @@ public class MovieTest
 	{
 	}
 
+	/**
+	 * Test to create a Movie object
+	 */
 	@Test
 	public void testCreateMovie()
 	{
@@ -30,15 +40,9 @@ public class MovieTest
 		assertEquals("http://bit.ly/test", movie.url);
 	}
 
-//	@Test
-//	public void testAddAverageRating()
-//	{
-//		movie.addAverageRating(1);
-//		movie.addAverageRating(3);
-//		movie.addAverageRating(5);
-//		assertEquals(9.0, movie.averageRating, 0.01);
-//	}
-	
+	/**
+	 * Test to get the average of all the ratings by users of this movie
+	 */
 	@Test
 	public void testGetAverageRating()
 	{

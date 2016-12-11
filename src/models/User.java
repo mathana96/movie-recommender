@@ -1,3 +1,6 @@
+/**
+ * @author mathana
+ */
 package models;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
@@ -7,15 +10,17 @@ import java.util.Map;
 
 import com.google.common.base.Objects;
 
+/**
+ * User class which defines a user of the movie mattcher system
+ *
+ */
 public class User
 {
-	//public Long userId;
 	public String firstName, lastName, occupation, username, password;
 	public int age;
-	public long userId, ratedMoviesId;
+	public long userId; //User id 
 	public char gender;
 	
-	public static long counter = 1l;
 	//Map of movie's and their rating. Using movie`id
 	public Map<Long, Rating> ratedMovies = new HashMap<>();
 	
@@ -32,9 +37,13 @@ public class User
 		this.password = password;
 	}
 
+	/**
+	 * Add this users particular rating of a movie 
+	 * @param movieId
+	 * @param rating
+	 */
 	public void addRatedMovies(Long movieId, Rating rating)
 	{
-		//ratedMoviesId = counter++;
 		ratedMovies.put(movieId, rating);
 	}
 	

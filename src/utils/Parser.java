@@ -1,3 +1,6 @@
+/**
+ * @author mathana
+ */
 package utils;
 
 import java.io.File;
@@ -12,15 +15,21 @@ import models.Movie;
 import models.Rating;
 import models.User;
 
+/**
+ * The parser class ensures the reading in of raw data from specified file paths
+ * and the packaging of that data into specific Object types which are then grouped 
+ * into specific data structures such as a HashMap or an ArrayList. 
+ *
+ */
 public class Parser
 {
-	Map<Long, User> users = new HashMap<>();
-	Map<Long, Movie> movies = new HashMap<>();
-	List<Rating> ratings = new ArrayList<>();
-	Map<String, Rating> ratingsMap = new HashMap<>();
+	Map<Long, User> users = new HashMap<>(); //Stores all the User objects
+	Map<Long, Movie> movies = new HashMap<>(); //Stores all the Movie objects 
+	List<Rating> ratings = new ArrayList<>(); //Stores all the Rating objects 
+	Map<String, Rating> ratingsMap = new HashMap<>(); //Map to ensure unique ratings
 
 
-	RatingByTimeComparator comparator = new RatingByTimeComparator();
+	RatingByTimeComparator comparator = new RatingByTimeComparator(); //Initialising the comparator
 
 
 	public Parser()
@@ -28,6 +37,12 @@ public class Parser
 
 	}
 
+	/**
+	 * Class to parse raw user data and store them in the users map
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
 	public Map<Long, User> parseUserData(String path) throws Exception
 	{
 		File usersFile = new File(path);
@@ -62,6 +77,12 @@ public class Parser
 		return users;
 	}
 
+	/**
+	 * Parsing of raw movie data
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
 	public Map<Long, Movie> parseMovieData(String path) throws Exception 
 	{
 		File moviesFile = new File(path);
@@ -101,6 +122,12 @@ public class Parser
 		return movies;
 	}
 
+	/**
+	 * Parsing of raw rating data
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Rating> parseRatingData(String path) throws Exception
 	{
 		File ratingsFile = new File(path);
@@ -129,13 +156,13 @@ public class Parser
 			}
 		}
 		inRatings.close();
+		
 		//Sort Rating objects based on the timestamp to get most recent rating on duplicates	
 		Collections.sort(ratings, comparator);
 
 		//Using a Map to filter out duplicates
 		for (Rating r: ratings)
 		{
-
 			ratingsMap.put(r.userId + "u" + r.movieId + "m", r);
 		}
 
@@ -143,10 +170,7 @@ public class Parser
 		List<Rating> ratingsFiltered = new ArrayList<>(ratingsMap.values());
 		Collections.sort(ratingsFiltered, comparator);
 
-		//		System.out.println(ratingsFiltered.size());
-		//		System.out.println(ratingsFiltered);
-
-		System.out.println(users.size());
+//		System.out.println(users.size());
 
 		//Adds respective ratings to users and movies
 		for (Rating rating: ratingsFiltered)
@@ -157,39 +181,18 @@ public class Parser
 
 			user.addRatedMovies(movie.movieId, r);
 			movie.addUserRatings(user.userId, r);
-			//			movie.addAverageRating(rating.rating);
-			//			System.out.println(movie.title + " " + movie.userRatings);
 		}
 		return ratingsFiltered;
 	}
 
-	//  public void store(Serializer serializer) throws Exception
-	//  {
-	//    serializer.push(users);
-	//    serializer.push(movies);
-	//    serializer.write(); 
-	//  }
-
-	//	public Map<Long, User> getUsers()
-	//	{
-	//		return users;
-	//	}
-	//
 	public User getUser(long l)
 	{
 		return users.get(l);
 	}
 
-	//	public Map<Long, Movie> getMovies()
-	//	{
-	//		return movies;
-	//	}
-	//
 	public Movie getMovie(long i)
 	{
 		return movies.get(i);
 	}
-
-
 
 }

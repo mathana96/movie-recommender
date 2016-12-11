@@ -77,6 +77,13 @@ public class RecommenderAPI
 
 	public User addUser(String firstName, String lastName, int age, char gender, String occupation, String username, String password)
 	{
+		Preconditions.checkNotNull(firstName);
+		Preconditions.checkNotNull(lastName);
+		Preconditions.checkNotNull(age);
+		Preconditions.checkNotNull(occupation);
+		Preconditions.checkNotNull(username);
+		Preconditions.checkNotNull(password);
+		
 		long userId = users.size() + 1;
 		User user = new User(userId, firstName, lastName, age, gender, occupation, username, password);
 		users.put(user.userId, user);
@@ -86,6 +93,7 @@ public class RecommenderAPI
 
 	public void removeUser(long userId)
 	{
+		Preconditions.checkNotNull(userId);
 		User user = getUserById(userId);
 		users.remove(user.userId);
 		usersLogin.remove(user.username);
@@ -93,6 +101,10 @@ public class RecommenderAPI
 
 	public Movie addMovie(String title, int year, String url)
 	{
+		Preconditions.checkNotNull(title);
+		Preconditions.checkNotNull(year);
+		Preconditions.checkNotNull(url);
+
 		long movieId = movies.size() + 1;
 		Movie movie = new Movie(movieId, title, year, url);
 		movies.put(movieId, movie);
@@ -101,6 +113,10 @@ public class RecommenderAPI
 
 	public Rating addRating(long userId, long movieId, int rating)
 	{
+		Preconditions.checkNotNull(userId);
+		Preconditions.checkNotNull(movieId);
+		Preconditions.checkNotNull(rating);
+
 		Rating r = new Rating(userId, movieId, rating);
 		User user = getUserById(r.userId);
 		Movie movie = getMovieById(r.movieId);
@@ -115,6 +131,8 @@ public class RecommenderAPI
 	public List<Movie> getTopTenMovies()
 	{
 		List<Movie> topTen = new ArrayList<>(movies.values());
+		Preconditions.checkArgument(topTen.size() > 0);
+		Preconditions.checkNotNull(topTen);
 		movieAvgComparator = new MovieAverageRatingComparator();
 		Collections.sort(topTen, movieAvgComparator);
 		if (topTen.size() > 10)
@@ -128,7 +146,7 @@ public class RecommenderAPI
 	}
 	public List<Movie> getUserRecommendations(long userId)
 	{
-		
+		Preconditions.checkNotNull(userId);
 
 		User currentUser = getUserById(userId);
 		if (currentUser.ratedMovies.size() > 0) 
@@ -140,13 +158,12 @@ public class RecommenderAPI
 			for (Rating currentUserRating: currentUserRatings)
 			{
 				Movie movie = getMovieById(currentUserRating.movieId);
-//				Set<Long> currentTarget = movie.userRatings.keySet();
 				if (movie.userRatings.size() > 1)
 				{
 					targetUsers.addAll(movie.userRatings.keySet());
 				}
-
 			}
+			
 			Long mostSimilar = 0L;
 			targetUsers.remove(currentUser.userId);
 			System.out.println(targetUsers);
@@ -201,6 +218,9 @@ public class RecommenderAPI
 
 	public boolean authenticate(String username, String password)
 	{
+		Preconditions.checkNotNull(username);
+		Preconditions.checkNotNull(password);
+
 		if (usersLogin.containsKey(username))
 		{
 			User user = usersLogin.get(username);
@@ -211,8 +231,12 @@ public class RecommenderAPI
 		}
 		return false;
 	}
+	
 	public boolean uniqueMovieCheck(String title, int year)
 	{		
+		Preconditions.checkNotNull(title);
+		Preconditions.checkNotNull(year);
+
 		for (Movie movie: getMovies().values())
 		{			
 			String movieTitle = movie.title;
@@ -228,14 +252,19 @@ public class RecommenderAPI
 
 	public List<Movie> searchMovies(String prefix)
 	{
+		Preconditions.checkNotNull(prefix);
 		List<Movie> searchMovies = new ArrayList<>(movies.values());
 		return filter(searchMovies, prefix);
 	}
 
 	private static List<Movie> filter(final Collection<Movie> source, final String prefix) 
 	{
+		Preconditions.checkNotNull(source);
+		Preconditions.checkNotNull(prefix);
+
 		return source.stream().filter(item -> item.title.toLowerCase().startsWith(prefix.toLowerCase())).collect(Collectors.toList());
 	}
+	
 	public List<Rating> getRatings()
 	{
 		return ratings;

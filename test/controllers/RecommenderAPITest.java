@@ -1,3 +1,6 @@
+/**
+ * @author mathana
+ */
 package controllers;
 
 import static org.junit.Assert.*;
@@ -15,6 +18,10 @@ import models.Movie;
 import models.Rating;
 import models.User;
 
+/**
+ * A test for the RecommenderAPI which contains the main functionality of the program
+ *
+ */
 public class RecommenderAPITest
 {
 	private RecommenderAPI recommender;
@@ -39,7 +46,7 @@ public class RecommenderAPITest
 		{
 			recommender.addRating(r.userId, r.movieId, r.rating);
 		}
-		
+
 		f.userRatingsFixtures();
 		f.ratedMoviesFixtures();
 	}
@@ -50,8 +57,11 @@ public class RecommenderAPITest
 		recommender = null;
 	}
 
+	/**
+	 * Test to see if a used can be added 
+	 */
 	@Test
-	public void testUser() //Add getUserByUsername
+	public void testUser() 
 	{
 		assertEquals(usersFixtures.length, recommender.getUsers().size());
 		recommender.addUser("Joe", "Bloggs", 54, 'M', "Network Administrator", "jbloggs", "secret");
@@ -61,6 +71,9 @@ public class RecommenderAPITest
 		assertEquals("Joe", recommender.getUserById(newUserId).firstName);
 	}
 
+	/**
+	 * Test to ensure a user can be removed from the data set
+	 */
 	@Test
 	public void testRemoveUser()
 	{
@@ -70,6 +83,9 @@ public class RecommenderAPITest
 		assertEquals(usersFixtures.length - 1, recommender.getUsers().size());
 	}
 
+	/**
+	 * Test to see if multiple users can be added and stored
+	 */
 	@Test
 	public void testUsers()
 	{
@@ -80,6 +96,9 @@ public class RecommenderAPITest
 		}
 	}
 
+	/**
+	 * Test the functionality of the addMovie method
+	 */
 	@Test
 	public void testMovie()
 	{
@@ -91,6 +110,9 @@ public class RecommenderAPITest
 		assertEquals("The Godfather", recommender.getMovieById(newMovieId).title);
 	}
 
+	/**
+	 * Test if multiple movies can be added and stored 
+	 */
 	@Test
 	public void testMovies()
 	{
@@ -101,6 +123,9 @@ public class RecommenderAPITest
 		}
 	}
 
+	/**
+	 * Test if a user can rate a movie
+	 */
 	@Test
 	public void testRating()
 	{
@@ -112,6 +137,9 @@ public class RecommenderAPITest
 		assertEquals(ratingsFixtures[0].movieId, recommender.getMovieById(ratingsFixtures[0].movieId).movieId);		
 	}
 
+	/**
+	 * Test if multiple ratings can be added and stored in various sub data structures
+	 */
 	@Test
 	public void testRatings()
 	{
@@ -124,6 +152,9 @@ public class RecommenderAPITest
 		}
 	}
 
+	/**
+	 * Test if the stored used ratings can be retrieved correctly 
+	 */
 	@Test
 	public void testGetUserRatings()
 	{
@@ -132,15 +163,18 @@ public class RecommenderAPITest
 		assertEquals(user.ratedMovies.get(1), recommender.getUserById(user.userId).ratedMovies.get(1));
 	}
 
+	/**
+	 * Test the accuracy of the top 10 movies result
+	 */
 	@Test
 	public void testGetTopTen()
 	{
 		recommender.addMovie("The Godfather", 1972, "http://www.imdb.com/title/tt0068646/");
 		assertEquals(moviesFixtures.length + 1, recommender.getMovies().size()); //Adding another movie to make it 11
-		
+
 		List<Movie> topTen = recommender.getTopTenMovies();
 		assertEquals(10, topTen.size()); //Assure only 10 movies printed
-		
+
 		assertEquals(topTen.get(0).movieId, moviesFixtures[0].movieId);
 		assertEquals(topTen.get(0).getAverageRating(), 3.4, 0.001);
 		assertEquals(topTen.get(1).movieId, moviesFixtures[7].movieId);
@@ -149,9 +183,12 @@ public class RecommenderAPITest
 		assertEquals(topTen.get(2).getAverageRating(), 1.8, 0.001);
 		assertEquals(topTen.get(3).movieId, moviesFixtures[9].movieId);
 		assertEquals(topTen.get(3).getAverageRating(), 1.5, 0.001);
-		
+
 	}
-	
+
+	/**
+	 * Test that the movie recommendations are as predicted 
+	 */
 	@Test
 	public void testGetUserRecommendations()
 	{
@@ -161,9 +198,12 @@ public class RecommenderAPITest
 		assertNotEquals(user.ratedMovies.size(), recommendedMovies.size());
 		assertTrue(!recommendedMovies.contains(user.ratedMovies.get(1)));
 		assertTrue(!recommendedMovies.contains(user.ratedMovies.get(4)));
-		
+
 	}
-	
+
+	/**
+	 * Test if the login authenticator system is working
+	 */
 	@Test
 	public void testAuthenticate()
 	{
@@ -172,4 +212,56 @@ public class RecommenderAPITest
 		assertFalse(recommender.authenticate("Jbloggs", "Secret"));
 		assertFalse(recommender.authenticate("Hello", "PassLOL"));
 	}
+
+	/**
+	 * Test for exceptions
+	 */
+	@Test (expected = Exception.class)
+	public void testExceptions()
+	{
+		//authenticate
+		String username = null;
+		String password = null;
+		recommender.authenticate(username, password);
+
+		//topTen
+		recommender.users = null;
+		recommender.movies = null;
+		recommender.ratings = null;
+		recommender.getTopTenMovies();
+
+		//getUserRecommendations
+		recommender.users = null;
+		recommender.movies = null;
+		recommender.ratings = null;
+		long userId = -500;
+		recommender.getUserRecommendations(userId);
+
+		//testAddMovie
+		String title = null;
+		int year = Integer.MAX_VALUE;
+		int year2 = Integer.MIN_VALUE;
+		String url = null;
+		recommender.addMovie(title, year, url);
+		recommender.addMovie(title, year2, url);
+
+		//testAddUser
+		String firstName = null;
+		String lastName = null;
+		int age = Integer.MAX_VALUE;
+		int age2 = Integer.MIN_VALUE;
+		char gender = '&';
+		String occupation = null;
+		String username2 = "^&%^&^%";
+		String password2 = "*&^&&^*&";
+		recommender.addUser(firstName, lastName, age, gender, occupation, username2, password2);
+		recommender.addUser(firstName, lastName, age2, gender, occupation, username2, password2);
+
+		//addRating
+		recommender.addRating(Long.MAX_VALUE, Long.MAX_VALUE, Integer.MAX_VALUE);
+		recommender.addRating(Long.MIN_VALUE, Long.MIN_VALUE, Integer.MIN_VALUE);
+
+		//removeUser
+		recommender.removeUser(-5000L);
+	}	
 }

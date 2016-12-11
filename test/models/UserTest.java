@@ -1,26 +1,20 @@
+/**
+ * @author mathana
+ */
 package models;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 
 public class UserTest
 {
 
-	@Before
-	public void setUp() throws Exception
-	{
-		
-	}
-
-	@After
-	public void tearDown() throws Exception
-	{
-	}
-
+	/**
+	 * Test to verify is a user can be created
+	 * @throws Exception
+	 */
 	@Test
 	public void testCreateUser() throws Exception
 	{
@@ -33,12 +27,6 @@ public class UserTest
 		assertEquals("carpenter", user.occupation);	
 		assertEquals("blarkin", user.username);
 		assertEquals("IAmAMenace", user.password);
-	}
-	
-	@Test
-	public void testUserCreatedFromParser()
-	{
-	
 	}
 
 }

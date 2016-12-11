@@ -1,3 +1,6 @@
+/**
+ * @author mathana
+ */
 package models;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
@@ -7,14 +10,16 @@ import java.util.Map;
 
 import com.google.common.base.Objects;
 
+/**
+ * Movie class provides the attributes of a movie object
+ *
+ */
 public class Movie
 {
 	public String title, url;
 	public int year;
-	public long movieId;//, userRatingsId;
+	public long movieId;
 	
-	public static long counter = 1l;
-
 	public Map<Long, Rating> userRatings = new HashMap<>();
 
 	public Movie(long movieId, String title, int year, String url)
@@ -25,11 +30,20 @@ public class Movie
 		this.url = url;
 	}
 
+	/**
+	 * Add a particular users rating of this movie
+	 * @param userId
+	 * @param rating
+	 */
 	public void addUserRatings(Long userId, Rating rating)
 	{
 		userRatings.put(userId, rating);
 	}
 
+	/**
+	 * Get the average user ratings  
+	 * @return
+	 */
 	public double getAverageRating()
 	{
 		double totalRating = 0.0; 

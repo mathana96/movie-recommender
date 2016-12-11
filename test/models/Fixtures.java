@@ -1,3 +1,6 @@
+/**
+ * Fixture data obtained from small data set provided
+ */
 package models;
 
 public class Fixtures

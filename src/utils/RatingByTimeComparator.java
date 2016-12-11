@@ -1,10 +1,16 @@
+/**
+ * @author mathana
+ */
 package utils;
 
 import java.util.Comparator;
 
 import models.Rating;
 
-
+/**
+ * A comparator class to sort the timestamp values of Rating objects in ascending order
+ *
+ */
 public class RatingByTimeComparator implements Comparator<Rating>
 {
 	@Override

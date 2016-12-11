@@ -1,14 +1,22 @@
+/**
+ * @author mathana
+ */
 package models;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
 
 import com.google.common.base.Objects;
 
+/**
+ * Rating class provides a model to hold rating objects with userid, movieid and rating id. Timestamp included in one case
+ * @author mathana
+ *
+ */
 public class Rating
 {
 	public long userId, movieId, timestamp;
 	public Integer rating;
-	public double averageRating;
+	public double averageRating; //Calculated based on the average user ratings of a movie Calculated in the movie class
 
 	public Rating(long userId, long movieId, Integer rating, long timestamp)
 	{
@@ -35,7 +43,6 @@ public class Rating
 		return toStringHelper(this).addValue(userId)
 				.addValue(movieId)
 				.addValue(rating)
-				//.addValue(timestamp)
 				.toString();
 	}
 

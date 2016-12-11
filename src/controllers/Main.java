@@ -1,10 +1,15 @@
+/**
+ * @author mathana
+ */
 package controllers;
 
 import java.io.File;
 import java.time.Year;
-
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.google.common.base.Optional;
 
@@ -16,19 +21,26 @@ import models.User;
 import utils.Serializer;
 import utils.XMLSerializer;
 
+/**
+ * The main class provides a console based user interfaced structured over a simple menu system without 
+ * the use of a library. The user interface allows users to interact with the program allowing them 
+ * to make full use of the features such as adding a new movie, rating a movie from the large database, discovering
+ * new movies with the rate a random movie feature and more. A user has to sign up before being able to use the features. 
+ *
+ */
 public class Main
 {
 	RecommenderAPI recommenderAPI;
-	User loggedInUser;
-	boolean authenticated = false;
+	User loggedInUser;								//Stores the current logged in user
+	boolean authenticated = false;		//Checks if a user has been authenticated 
 	Scanner input = new Scanner(System.in);
 
 
 	public Main() throws Exception
 	{
-		File datastore = new File("datastore.xml");
+		File datastore = new File("datastore.xml"); //The main datastore
 
-		if (datastore.isFile())
+		if (datastore.isFile()) //If the file exists
 		{
 			StdOut.println("File present");
 			Serializer serializer = new XMLSerializer(datastore);
@@ -38,7 +50,7 @@ public class Main
 		else
 		{
 			StdOut.println("File not present");
-			Serializer newSerializer = new XMLSerializer(new File("datastore.xml"));
+			Serializer newSerializer = new XMLSerializer(new File("datastore.xml")); //Creating a new xml file
 			recommenderAPI = new RecommenderAPI(newSerializer); 
 			recommenderAPI.loadRawData(); //Load and store raw data into datastore.xml
 			recommenderAPI.load();
@@ -51,9 +63,13 @@ public class Main
 		main.loginRun();
 	}
 
+	/**
+	 * The first menu which the user sees. Provides options to login or signup
+	 * @return
+	 */
 	public int loginMenu()
 	{
-		boolean errorFree = false;
+		boolean errorFree = false; //Ensures options entered are correct
 		int option = 0;
 
 		while (!errorFree) 
@@ -83,11 +99,13 @@ public class Main
 		return option;
 	}
 
-
+	/**
+	 * The main menu and welcome page of the system
+	 */
 	public int mainMenu()
 	{
 		boolean errorFree = false;
-		int option = 0;
+		int option = 0; //Users menu selection
 		while (!errorFree) 
 		{
 			option = 0;
@@ -122,6 +140,10 @@ public class Main
 
 	}
 
+	/**
+	 * Run method for the login menu
+	 * @throws Exception
+	 */
 	public void loginRun() throws Exception
 	{
 		StdOut.println("\nWelcome to Movie-MattCher - a movie recommender just for you!"
@@ -135,30 +157,34 @@ public class Main
 			switch(loginOption)
 			{
 			case 1:
-				authenticate();
+				authenticate(); //Calls method for login
 				break;
 
 			case 2:
-				addUser();
+				addUser(); //Calls method for signup
 				break;
 
 			default:
 				StdOut.println("Your selection is incorrect or not available, please try again");
 			}
-			if (!authenticated)
+			if (!authenticated) //Display menu again if authentication failed
 			{
 				loginOption = loginMenu();
 			}
-			else
+			else //Display welcome page and main menu if the authetication is successful
 			{
 				loginOption = 0;
 				menuRun();
 				break;
 			}
 		}
-		StdOut.println("Made it here. Thanks for stopping by");		
+		StdOut.println("Made it here. Thanks for stopping by");		//The last message when you log out
 	}
 
+	/**
+	 * Run method for the welcome page and main menu
+	 * @throws Exception
+	 */
 	public void menuRun() throws Exception
 	{
 		int mainMenuOption = mainMenu();
@@ -168,36 +194,36 @@ public class Main
 			switch(mainMenuOption)
 			{
 			case 1:
-				addMovie();
+				addMovie(); //Method call for adding a new movie
 				break;
 
 			case 2:
-				addARating();
+				addARating(); //Method call for adding a new rating
 				break;
 
 			case 3:
-				addRandomRatings();
+				addRandomRatings(); //Method call to rate random movies
 				break;
 
 			case 4:
-				searchMovies();
+				searchMovies(); //Method call to search movies
 				break;
 
 			case 5:
-				getTop10();
+				getTop10(); //Method call to get all time top 10
 				break;
 
 			case 6:
-				personalRec();
+				personalRec(); //Method call to get personalised movie recommendations
 				break;
 
 			case 99:
-				removeUser();
+				removeUser(); //Method call to delete account
 				break;
 			default:
 				StdOut.println("Your selection is incorrect or not available, please try again");
 			}
-			if (loggedInUser != null)
+			if (loggedInUser != null) //Display menu again if account still exists or not logged out
 			{
 				mainMenuOption = mainMenu();
 			}
@@ -209,12 +235,19 @@ public class Main
 		}
 	}
 
+	/**
+	 * Method to search all movies for a prefix provided by the user
+	 */
 	public void searchMovies()
 	{
 		StdOut.println("Enter your search: ");
 		String prefix = StdIn.readString();
 		System.out.println(recommenderAPI.searchMovies(prefix));
 	}
+
+	/**
+	 * Method to get personal movie recommendtions
+	 */
 	public void personalRec()
 	{
 		if (loggedInUser.ratedMovies.size() > 0)
@@ -228,11 +261,18 @@ public class Main
 
 	}
 
+	/**
+	 * Gets the top 10 movies of all time in the system
+	 */
 	public void getTop10()
 	{
 		System.out.println(recommenderAPI.getTopTenMovies());
 	}
 
+	/**
+	 * Method to add a new user to the system
+	 * @throws Exception
+	 */
 	public void addUser() throws Exception
 	{
 
@@ -244,6 +284,7 @@ public class Main
 		StdOut.println("Enter your last name? ");
 		String lastName = StdIn.readString();
 
+		//Loop if non-numerical or within range
 		boolean logicalAge = false;
 		int age = 0;
 		while (!logicalAge) 
@@ -277,13 +318,14 @@ public class Main
 		StdOut.println("Your occupation? ");
 		String occupation = StdIn.readString();
 
+		//Loops to check that the username is unique
 		boolean unique = false;
 		String username = null;
 		while (!unique) 
 		{
 			StdOut.println("Enter a username: ");
 			username = StdIn.readString();
-			if (!recommenderAPI.usersLogin.containsKey(username))
+			if (!recommenderAPI.usersLogin.containsKey(username)) //If username is unique, break from loop
 			{
 				unique = true;
 			}
@@ -299,9 +341,12 @@ public class Main
 		User addedUser = recommenderAPI.addUser(firstName, lastName, age, gender, occupation, username, password);
 		recommenderAPI.store();
 		StdOut.println("Your details have been logged!");
-		addLoginRating(addedUser);
+		addLoginRating(addedUser); //Calling the login movie rating system
 	}
 
+	/**
+	 * Authenticator method to check user's username and password
+	 */
 	public void authenticate()
 	{
 		String username;
@@ -324,10 +369,15 @@ public class Main
 		}
 	}
 
+	/**
+	 * Method to add a rating of a specific movie indicated by the movie id
+	 */
 	public void addARating()
 	{
-		long mvId = 0L;
+		long mvId = 0L; //The movie id
 		int rating = 0;
+
+		//Loop to ensure the id is a number and the movie id exists in the system
 		boolean number = false;
 		while (!number) 
 		{
@@ -335,7 +385,7 @@ public class Main
 			{
 				StdOut.println("Enter movie Id of movie you want to add rating: ");
 				mvId = StdIn.readInt();
-//				StdIn.readString();
+				//				StdIn.readString();
 
 				if(recommenderAPI.movies.containsKey(mvId))
 				{
@@ -353,7 +403,8 @@ public class Main
 				StdOut.println("Numerical values only");					
 			}
 		}
-		
+
+		//Loop to ensure the rating is within the range and is numerical
 		boolean number2 = false;
 		while (!number2) 
 		{
@@ -379,19 +430,25 @@ public class Main
 		StdOut.println("Successfully rated!");
 		recommenderAPI.addRating(loggedInUser.userId, mvId, rating);
 	}
-	
-	
+
+	/**
+	 * Method which generates 10 random movies after a user signs up to be rated
+	 * @param addedUser
+	 * @throws Exception
+	 */
 	public void addLoginRating(User addedUser) throws Exception
 	{
 		int max = recommenderAPI.movies.size();
 		int rating = 0;
 		StdOut.println("\nYou are required to rate at least 10 movies before using this service. Enter 100 to exit when prompted for rating\n");
+
+		//Loop for 10 ratings and as long as user does not want to exit
 		while (addedUser.ratedMovies.size() < 10 && rating != 100)
 		{
 			Random random = new Random();
 			long randomId = random.nextInt(max - 0);
 
-			if (!addedUser.ratedMovies.containsKey(randomId))
+			if (!addedUser.ratedMovies.containsKey(randomId)) //Ensures only movies that user hasn't rated shows up 
 			{
 				boolean number = false;
 				while (!number) 
@@ -405,7 +462,7 @@ public class Main
 						{
 							number = true;
 						}
-						else if (rating == 100)
+						else if (rating == 100) //Exit login rating
 						{
 							number = true;
 							break;
@@ -417,7 +474,7 @@ public class Main
 						StdOut.println("Numerical values only");					
 					}
 				}		
-				if (rating != 100)
+				if (rating != 100) //Add the rating if it's within range
 				{
 					recommenderAPI.addRating(addedUser.userId, randomId, rating);
 				}
@@ -427,17 +484,23 @@ public class Main
 		recommenderAPI.store();
 	}
 
+	/**
+	 * Add ratings to randomly generated movies. Movies shown have not been rated by the user previously 
+	 * @throws Exception
+	 */
 	public void addRandomRatings() throws Exception
 	{
-		int max = recommenderAPI.movies.size();
+		int max = recommenderAPI.movies.size(); //Maximum generated ratings
 		int rating = 0;
 		StdOut.println("\nMovie Rating Process. You are shown random movies you haven't rated before. Enter 100 to exit when prompted for rating\n");
+
+		//Loop to ensure user still has unrated movies
 		while (loggedInUser.ratedMovies.size() < max && rating != 100)
 		{
 			Random random = new Random();
 			long randomId = random.nextInt(max - 0);
 
-			if (!loggedInUser.ratedMovies.containsKey(randomId))
+			if (!loggedInUser.ratedMovies.containsKey(randomId)) //Display random movies the user has not rated
 			{
 				boolean number = false;
 				while (!number) 
@@ -451,7 +514,7 @@ public class Main
 						{
 							number = true;
 						}
-						else if (rating == 100)
+						else if (rating == 100) //Exit system
 						{
 							number = true;
 							break;
@@ -473,23 +536,40 @@ public class Main
 		recommenderAPI.store();
 	}
 
+	/**
+	 * Method to delete the user account. A
+	 * @throws Exception
+	 */
 	public void removeUser() throws Exception
 	{
 		StdOut.println("Are you sure you want to delete your account? (y/n)");
 		String toDelete = StdIn.readString();
+
 		if (toDelete.equalsIgnoreCase("y"))
 		{
 			Optional<User> user = Optional.fromNullable(recommenderAPI.getUserById(loggedInUser.userId));
 			if (user.isPresent()) 
 			{
-				recommenderAPI.removeUser(loggedInUser.userId);
-				loggedInUser = null;
+				Set<Long> ratedMoviesId = loggedInUser.ratedMovies.keySet();
+				for (Long movieId: ratedMoviesId) //Delete all the user's rated movies
+				{
+					Movie movie = recommenderAPI.getMovieById(movieId);
+					movie.userRatings.remove(loggedInUser.userId);
+				}
+				recommenderAPI.removeUser(loggedInUser.userId); //Remove the user entirely
+
+				loggedInUser = null; //Logs the user out of the system
 				StdOut.println("Account deleted");
 			}
 		}
 		recommenderAPI.store();
 	}
 
+	/**
+	 * Method to add a new movie in the system and provide it with a rating upon adding. Movie has to be unique
+	 * and not found in the database
+	 * @throws Exception
+	 */
 	public void addMovie() throws Exception
 	{
 		StdOut.println("Adding a movie");
@@ -526,6 +606,7 @@ public class Main
 				}
 			}
 
+			//Checks if the movie and year are present in the system
 			if (recommenderAPI.uniqueMovieCheck(title, year) == true)
 			{
 				unique = true;
