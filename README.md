@@ -1,6 +1,6 @@
 # Movie Matt-Cher #
 
-Movie Matt-Cher is a console-based movie recommender system based on a user's previous movie ratings. Users must create an account before using this service. Raw data from MovieLens was used and XML is used for persistence. Libraries used include Guava, Princeton's Stdlib ans xstream.  
+Movie Matt-Cher is a console-based movie recommender system based on a user's previous movie ratings. Users must create an account before using this service. Raw data from MovieLens was used and XML is used for persistence. Libraries used include Guava, Princeton's Stdlib and xstream.  
 
 ### Run through of the program ###
 
@@ -16,7 +16,7 @@ The main menu offers the following options;
 
 * Rate random movies –– Users are shown random movies (limited by number of movies in database) which they have not rated and prompts them for a rating. 
 
-* Search movies –– Users are allowed to search the movie database. Results are filtered based on their input/prefix. They may use this feature to otain a movie ID before rating it. 
+* Search movies –– Users are allowed to search the movie database. Results are filtered based on their input/prefix. They may use this feature to obtain a movie ID before rating it. 
 
 * Top 10 movies of all time –– A list of the 10 highest rated movies is displayed. They are ranked based on average user ratings. 
 
