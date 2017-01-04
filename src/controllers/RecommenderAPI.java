@@ -175,39 +175,41 @@ public class RecommenderAPI
 			}
 			
 			Long mostSimilar = 0L;
+			int totalSimilarity = 0;
 			targetUsers.remove(currentUser.userId);
-			System.out.println(targetUsers);
+//			System.out.println(targetUsers);
 			if (targetUsers != null && targetUsers.size() > 0) 
 			{
-				for (Rating currentUserRating: currentUserRatings)
+				for (Long targetId: targetUsers)
 				{
-					int currentRating = currentUserRating.rating;
+					User targetUser = getUserById(targetId);
+					int currentSimilarity = 0;
+					int targetRating = 0;
+					int currentRating = 0;
 					
-					Movie movie = getMovieById(currentUserRating.movieId);
-					
-					for (Long targetId: targetUsers)
+					for (Rating targetUserRating: targetUser.ratedMovies.values())
 					{
-						int similarity = 0;
-						User targetUser = getUserById(targetId);
-						int targetRating = -5;
-						if (targetUser.ratedMovies.containsKey(movie.movieId))
-						{
-							targetRating = targetUser.ratedMovies.get(movie.movieId).rating;
-						}
-						similarity += (currentRating * targetRating);
+						Movie movie = getMovieById(targetUserRating.movieId);			
 						
-						if (similarity > mostSimilar)
+						if (currentUser.ratedMovies.containsKey(targetUserRating.movieId))
 						{
-							mostSimilar = targetId;
-						}						
+							targetRating = targetUserRating.rating;
+							currentRating = currentUser.ratedMovies.get(movie.movieId).rating;
+							currentSimilarity += (currentRating * targetRating);
+						}
 					}
+					
+					if (currentSimilarity > totalSimilarity)
+					{
+						totalSimilarity = currentSimilarity;
+						mostSimilar = targetId;
+					}						
 				}
 			}
 			
 			User mostSimilarUser = getUserById(mostSimilar);
 			System.out.println(mostSimilarUser);
 			List<Movie> recommendedMoviesList = new ArrayList<>();
-
 			if (mostSimilarUser != null) 
 			{
 				for (Rating rating: mostSimilarUser.ratedMovies.values())
@@ -218,6 +220,8 @@ public class RecommenderAPI
 					}
 				}
 			}
+			movieAvgComparator = new MovieAverageRatingComparator();
+			Collections.sort(recommendedMoviesList, movieAvgComparator);
 			return recommendedMoviesList;
 		}
 		else
@@ -226,6 +230,8 @@ public class RecommenderAPI
 		}
 	}
 
+	
+	
 	public boolean authenticate(String username, String password)
 	{
 		Preconditions.checkNotNull(username);

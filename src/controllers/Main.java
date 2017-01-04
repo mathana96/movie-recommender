@@ -114,8 +114,8 @@ public class Main
 			{
 				StdOut.println("\n======Main Menu======\n");
 
-				StdOut.println("Welcome " + loggedInUser.firstName + "!");
-				StdOut.println("You have currently rated " + loggedInUser.ratedMovies.size() + " id " + loggedInUser.userId + " movies\n");
+				StdOut.println("Welcome " + loggedInUser.firstName + "!" + " [id = " + loggedInUser.userId + "]");
+				StdOut.println("You have currently rated " + loggedInUser.ratedMovies.size() + " movies\n");
 				StdOut.println("1) Add a new movie");
 				StdOut.println("2) Rate a movie");
 				StdOut.println("3) Rate random movies");
